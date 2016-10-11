@@ -14,7 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitThis": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "newLine": "LF"
   },
   "exclude": [
     "node_modules",
