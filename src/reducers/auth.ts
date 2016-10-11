@@ -1,7 +1,7 @@
-import { IAction, ActionType } from './actions';
-import { assign } from './lib/utils';
+import { assign } from '../lib/utils';
+import { ActionType, IAction } from '../actions';
 
-export function reducer(data: IData, action: IAction) {
+export default (data: IAuthData, action: IAction) => {
   switch (action.type) {
 
     case ActionType.LOGIN:

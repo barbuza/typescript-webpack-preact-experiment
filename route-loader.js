@@ -1,7 +1,11 @@
+var path = require("path");
+
 module.exports = function(source) {
   if (this.cacheable) {
     this.cacheable();
   }
+  const dirname = path.dirname(this.resourcePath);
+  const loaderPath = `./${path.relative(dirname, path.resolve('src', 'lib', 'RouteLoader'))}`;
   const routes = JSON.parse(source).map(route => `
     preact.h(RouteLoader, {
       path: ${JSON.stringify(route[0])},
@@ -15,7 +19,7 @@ module.exports = function(source) {
   return `
     var preact = require("preact");
     var Router = require("preact-router").Router;
-    var RouteLoader = require("./lib/RouteLoader").default;
+    var RouteLoader = require("${loaderPath}").default;
     module.exports = function Routes() {
       return preact.h(Router, {}, ${routes.join(',\n')});
     };

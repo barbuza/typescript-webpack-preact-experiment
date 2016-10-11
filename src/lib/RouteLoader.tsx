@@ -16,13 +16,6 @@ export default class RouteLoader extends Component<IRouteLoaderProps, {}> {
   static pageCache: { [path: string]: Page } = {};
   static pagePromises: { [path: string]: Promise<Page> } = {};
 
-  constructor(props: IRouteLoaderProps) {
-    super(props);
-    this.state = {
-      cls: RouteLoader.pageCache[props.path]
-    };
-  }
-
   protected loadPageClass() {
     const path = this.props.path;
     const getClass = this.props.getClass;
@@ -40,7 +33,7 @@ export default class RouteLoader extends Component<IRouteLoaderProps, {}> {
     }
 
     RouteLoader.pagePromises[path].then(() => {
-      if (!this.unmount) {
+      if (path === this.props.path && !this.unmount) {
         this.setState({});
       }
     });
@@ -58,7 +51,7 @@ export default class RouteLoader extends Component<IRouteLoaderProps, {}> {
     this.unmount = true;
   }
 
-  renderContent(): string | JSX.Element {
+  renderContent() {
     const cls = RouteLoader.pageCache[this.props.path];
     if (cls) {
       return preact.h(cls, omit(this.props, 'path', 'getClass'));

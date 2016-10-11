@@ -5,7 +5,7 @@ import { ActionType } from './actions';
 export default class Header extends Component<{}, {}> {
 
   renderUserTools() {
-    if (this.data.authenticated) {
+    if (this.data.auth.authenticated) {
       return (
         <div>
           hello username
