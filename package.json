@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=development webpack-dev-server --content-base build --history-api-fallback --inline=false",
+    "prod": "NODE_ENV=production webpack-dev-server --content-base build --history-api-fallback --inline=false --compress"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.22.0",
+    "preact": "^6.3.0",
+    "preact-render-to-string": "^3.2.1",
+    "preact-router": "^2.1.0",
+    "ts-loader": "^0.9.0",
+    "tslib": "github:microsoft/tslib",
+    "typescript": "^2.1.0-dev.20161010",
+    "typings": "^1.4.0",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-append": "^0.1.2",
+    "webpack-dev-server": "^2.1.0-beta.8"
+  }
+}

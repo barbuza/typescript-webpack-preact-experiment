@@ -1,0 +1,7 @@
+/.vscode
+/.idea
+/build
+/es5
+/node_modules
+/typings
+/.nvmrc

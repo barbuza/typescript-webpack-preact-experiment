@@ -1,0 +1,14 @@
+[
+  [
+    "/",
+    "./pages/Index"
+  ],
+  [
+    "/foo",
+    "./pages/Foo"
+  ],
+  [
+    "/bar/:id",
+    "./pages/Bar"
+  ]
+]
