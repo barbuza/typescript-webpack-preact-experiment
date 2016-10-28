@@ -1,3 +1,3 @@
-import preloaderUrl from './img/preloader.gif';
+import preloaderUrl from '../img/preloader.gif';
 
 export default () => <img src={preloaderUrl} />;

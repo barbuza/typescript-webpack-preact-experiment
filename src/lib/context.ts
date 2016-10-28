@@ -1,6 +1,11 @@
-import { IAction } from '../actions';
+import { Action } from '../actions';
+import Store from '../stores';
+import { IHistory } from 'history';
 
 export interface IContext {
-  data: IData;
-  dispatch: (action: IAction) => void;
+  mobxStores: {
+    store: Store;
+    emit<T>(action: Action<T>): T;
+    history: IHistory;
+  };
 }

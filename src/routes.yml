@@ -1,0 +1,14 @@
+- path: /
+  page: ./pages/Index
+
+- path: /foo
+  page: ./pages/Foo
+  action: ./actions:LoadFoo
+
+- path: /bar/:id
+  page: ./pages/Bar
+  action: ./actions:LoadBar
+
+- path: /spam/:id
+  page: ./pages/Bar
+  action: ./actions:LoadBar

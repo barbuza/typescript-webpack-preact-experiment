@@ -1,17 +1,18 @@
 import { Component as PreactComponent } from 'preact';
 import { IContext } from './context';
-import { IAction } from '../actions';
+import { Action } from '../actions';
+import Store from '../stores';
 
 abstract class Component<P, S> extends PreactComponent<P, S> {
 
   protected readonly context: IContext;
 
-  protected dispatch(action: IAction): void {
-    this.context.dispatch(action);
+  protected get store(): Store {
+    return this.context.mobxStores.store;
   }
 
-  protected get data(): IData {
-    return this.context.data;
+  protected emit<T>(action: Action<T>): T {
+    return this.context.mobxStores.emit(action);
   }
 
 }

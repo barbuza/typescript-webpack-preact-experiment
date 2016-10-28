@@ -1,16 +1,45 @@
-export enum ActionType {
-  LOGIN,
-  LOGOUT
+import Store from './stores';
+
+export abstract class Action<T> {
+
+    abstract react(store: Store): T;
+
 }
 
-export interface IAction {
-  type: ActionType;
+export class LoginAction extends Action<void> {
+
+    protected name: string;
+
+    constructor(name: string) {
+        super();
+        this.name = name;
+    }
+
+    react(store: Store) {
+        store.auth.user = { name: this.name };
+    }
+
 }
 
-export interface ILoginAction extends IAction {
-  type: ActionType.LOGIN;
+export class LogoutAction extends Action<void> {
+
+    react(store: Store) {
+        store.auth.user = null;
+    }
+
 }
 
-export interface ILogoutAction extends IAction {
-  type: ActionType.LOGOUT;
+export class RoutingAction extends Action<void> {
+
+    protected path: string;
+
+    constructor(path: string) {
+        super();
+        this.path = path;
+    }
+
+    react(store: Store) {
+        store.routing.path = this.path;
+    }
+
 }

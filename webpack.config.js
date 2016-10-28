@@ -26,7 +26,7 @@ module.exports = {
       loaders: ['file']
     }]
   },
-  devtool: process.env.NODE_ENV === 'production' ?  '#sourcemap' : '#eval-sourcemap',
+  devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
   plugins: [
     new HtmlPlugin(),
     new webpack.DefinePlugin({
@@ -40,6 +40,11 @@ module.exports = {
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ comments: /a^/, compress: { warnings: false } })
+    new webpack.optimize.UglifyJsPlugin({
+      comments: /a^/,
+      compress: {
+        warnings: false
+      }
+    })
   );
 }

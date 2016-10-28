@@ -1,4 +1,4 @@
-`typescript@2.1` / `webpack@2` / `preact` experiment
+`typescript@2` / `webpack@2` / `mobx` / `preact` experiment
 
 ## goals
 
@@ -9,6 +9,6 @@
 
 ## builtins
 
-- hand rolled redux-like store 
-- typesafe app state in context
-- code splitting in routes
+- routing
+- data fetching
+- code splitting
