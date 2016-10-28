@@ -1,6 +1,6 @@
 import Component from '../lib/Component';
 import Header from './Header';
-import Routes from '!routes!../routes.yml';
+import Routes from './Routes';
 
 export default class Root extends Component<{}, {}> {
 

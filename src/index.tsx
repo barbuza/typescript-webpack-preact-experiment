@@ -5,6 +5,7 @@ import { createBrowserHistory } from 'history';
 import { Action, RoutingAction } from './actions';
 import Store from './stores';
 import Root from './components/Root';
+import Routes from './components/Routes';
 
 const store = new Store();
 
@@ -13,17 +14,19 @@ const history = createBrowserHistory();
 store.routing.path = history.location.pathname;
 
 history.listen(location => {
-    emit(new RoutingAction(location.pathname));
+  emit(new RoutingAction(location.pathname));
 });
 
 function emit<T>(action: Action<T>): T {
-    console.debug('%cEMIT', 'font-weight: bold; color: white; background: black; padding: 2px 3px 0 3px', action);
-    return action.react(store);
+  console.debug('%cEMIT', 'font-weight: bold; color: white; background: black; padding: 2px 3px 0 3px', action);
+  return action.react(store);
 }
 
+Routes.enableFetcher(store);
+
 preact.render(
-    <Provider store={store} history={history} emit={emit}>
-        <Root />
-    </Provider>,
-    document.body
+  <Provider store={store} history={history} emit={emit}>
+    <Root />
+  </Provider>,
+  document.body
 );

@@ -12,11 +12,6 @@ module.exports = {
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']
   },
-  resolveLoader: {
-    alias: {
-      'routes': path.resolve('route-loader.js')
-    }
-  },
   module: {
     loaders: [{
       test: /\.tsx?$/,
