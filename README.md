@@ -18,3 +18,4 @@
 - `yarn install`
 - `./node_modules/.bin/typings install`
 - `node codegen`
+- `npm start`
