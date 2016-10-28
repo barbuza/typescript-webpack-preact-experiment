@@ -3,10 +3,10 @@ import { observable, asMap, transaction, autorun } from 'mobx';
 import { connect } from 'mobx-preact';
 
 import PagePreloader from './PagePreloader';
-import Component from '../lib/Component';
-import MobxStore from '../stores';
+import Component from './Component';
+import Store from '../stores';
 
-type FetchData = (store: MobxStore, callback: (data: {}) => void) => void;
+type FetchData = (store: Store, callback: (data: {}) => void) => void;
 
 interface IPageModule {
   default: preact.ComponentConstructor<{}, {}>;
@@ -67,7 +67,7 @@ function match(path: string, pattern: string): {} | null {
 @connect
 export default class Routes extends Component<{}, {}> {
 
-  static enableFetcher(store: MobxStore) {
+  static enableFetcher(store: Store) {
     autorun(() => {
       const path = store.routing.path;
       <% routes.forEach(route => {%>

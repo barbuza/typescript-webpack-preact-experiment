@@ -1,8 +1,8 @@
 import { connect } from 'mobx-preact';
 import { observable } from 'mobx';
 
-import Component from '../lib/Component';
-import Link from '../lib/Link';
+import Component from './Component';
+import Link from './Link';
 import { LoginAction, LogoutAction } from '../actions';
 
 

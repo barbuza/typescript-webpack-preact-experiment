@@ -1,4 +1,4 @@
-import Component from '../lib/Component';
+import Component from './Component';
 import Header from './Header';
 import Routes from './Routes';
 

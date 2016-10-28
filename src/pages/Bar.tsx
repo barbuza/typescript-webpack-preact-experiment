@@ -1,5 +1,5 @@
 import { connect } from 'mobx-preact';
-import Component from '../lib/Component';
+import Component from '../components/Component';
 
 interface IData {
   spam: string;

@@ -1,5 +1,5 @@
 import { Component as PreactComponent } from 'preact';
-import { IContext } from './context';
+import { IContext } from '../context';
 import { Action } from '../actions';
 import Store from '../stores';
 
