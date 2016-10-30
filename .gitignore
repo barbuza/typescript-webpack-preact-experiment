@@ -6,4 +6,4 @@
 /node_modules
 /typings
 /.nvmrc
-/src/components/Routes.tsx
+/src/routes.ts
