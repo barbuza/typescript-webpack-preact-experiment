@@ -11,7 +11,13 @@ export default [
     key: "0",
     load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
       require.ensure(["./pages/Index"], () => {
-        resolve(require("./pages/Index"));
+        if (process.env.NODE_ENV === 'production') {
+          resolve(require("./pages/Index"));
+        } else {
+          setTimeout(() => {
+            resolve(require("./pages/Index"));
+          }, 500);
+        }
       });
     }
   },
@@ -21,7 +27,13 @@ export default [
     key: "1",
     load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
       require.ensure(["./pages/Foo"], () => {
-        resolve(require("./pages/Foo"));
+        if (process.env.NODE_ENV === 'production') {
+          resolve(require("./pages/Foo"));
+        } else {
+          setTimeout(() => {
+            resolve(require("./pages/Foo"));
+          }, 500);
+        }
       });
     }
   },
@@ -31,7 +43,13 @@ export default [
     key: "2",
     load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
       require.ensure(["./pages/Bar"], () => {
-        resolve(require("./pages/Bar"));
+        if (process.env.NODE_ENV === 'production') {
+          resolve(require("./pages/Bar"));
+        } else {
+          setTimeout(() => {
+            resolve(require("./pages/Bar"));
+          }, 500);
+        }
       });
     }
   },
@@ -41,7 +59,13 @@ export default [
     key: "2",
     load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
       require.ensure(["./pages/Bar"], () => {
-        resolve(require("./pages/Bar"));
+        if (process.env.NODE_ENV === 'production') {
+          resolve(require("./pages/Bar"));
+        } else {
+          setTimeout(() => {
+            resolve(require("./pages/Bar"));
+          }, 500);
+        }
       });
     }
   },

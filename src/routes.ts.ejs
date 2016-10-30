@@ -11,7 +11,13 @@ export default [
     key: <%- route.key %>,
     load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
       require.ensure([<%- route.page %>], () => {
-        resolve(require(<%- route.page %>));
+        if (process.env.NODE_ENV === 'production') {
+          resolve(require(<%- route.page %>));
+        } else {
+          setTimeout(() => {
+            resolve(require(<%- route.page %>));
+          }, 500);
+        }
       });
     }
   },

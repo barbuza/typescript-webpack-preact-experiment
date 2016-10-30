@@ -1,45 +1,29 @@
 import Store from './stores';
 
-export abstract class Action<T> {
+export interface Action<T> {
 
-    abstract react(store: Store): T;
-
-}
-
-export class LoginAction extends Action<void> {
-
-    protected name: string;
-
-    constructor(name: string) {
-        super();
-        this.name = name;
-    }
-
-    react(store: Store) {
-        store.auth.user = { name: this.name };
-    }
+  react(store: Store): T;
 
 }
 
-export class LogoutAction extends Action<void> {
+export class LoginAction implements Action<void> {
 
-    react(store: Store) {
-        store.auth.user = null;
-    }
+  protected name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  react(store: Store) {
+    store.auth.user = { name: this.name };
+  }
 
 }
 
-export class RoutingAction extends Action<void> {
+export class LogoutAction implements Action<void> {
 
-    protected path: string;
-
-    constructor(path: string) {
-        super();
-        this.path = path;
-    }
-
-    react(store: Store) {
-        store.routing.path = this.path;
-    }
+  react(store: Store) {
+    store.auth.user = null;
+  }
 
 }

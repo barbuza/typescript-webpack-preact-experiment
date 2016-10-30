@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "build": "tsc --noEmit && NODE_ENV=production webpack --bail",
     "start": "NODE_ENV=development webpack-dev-server --content-base build --history-api-fallback --inline=false",
     "prod": "NODE_ENV=production webpack-dev-server --content-base build --history-api-fallback --inline=false --compress"
   },

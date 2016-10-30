@@ -14,8 +14,10 @@ export default class Bar extends Component<IArgs & IData, {}> {
   render() {
     return (
       <div>
-        <div>bar, id = {this.props.id}, spam = {this.props.spam}</div>
-        <div>user json = {JSON.stringify(this.store.auth.user)}</div>
+        <div>args:</div>
+        <div className={styles.json}>{JSON.stringify({ id: this.props.id })}</div>
+        <div>data:</div>
+        <div className={styles.json}>{JSON.stringify({ spam: this.props.spam })}</div>
       </div>
     );
   }

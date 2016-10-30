@@ -4,14 +4,14 @@ import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
 import Store from './stores';
 import { RoutingState } from './stores/routing';
-import { Action, RoutingAction } from './actions';
+import { Action } from './actions';
 import Root from './components/Root';
 
 const history = createBrowserHistory();
 const store = new Store(history.location.pathname);
 
 history.listen(location => {
-  emit(new RoutingAction(location.pathname));
+  store.routing.path = location.pathname;
 });
 
 function emit<T>(action: Action<T>): T {
