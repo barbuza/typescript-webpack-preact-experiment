@@ -8,10 +8,7 @@ export interface IAction<T> {
 
 export class LoginAction implements IAction<void> {
 
-  protected name: string;
-
-  constructor(name: string) {
-    this.name = name;
+  constructor(protected name: string) {
   }
 
   public react(store: Store) {

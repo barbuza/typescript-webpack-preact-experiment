@@ -88,7 +88,12 @@ export default class Routing {
   @computed
   protected get match(): IMatch | null {
     for (const route of routes) {
-      const args = match(this.path, route.pattern);
+      let args = null as {} | null;
+      if ((route instanceof StaticRoute) && this.path === route.pattern) {
+        args = {};
+      } else if ((route instanceof DynamicRoute)) {
+        args = match(this.path, route.pattern);
+      }
       if (args) {
         return { route, args };
       }
