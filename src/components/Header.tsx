@@ -1,4 +1,4 @@
-import { connect } from 'mobx-preact';
+import { connect } from 'mobx-preact-alt';
 import { observable } from 'mobx';
 import Component from './Component';
 import Link from './Link';

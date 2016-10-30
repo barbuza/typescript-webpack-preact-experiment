@@ -1,4 +1,4 @@
-declare module 'mobx-preact' {
+declare module 'mobx-preact-alt' {
 
     import { Component } from 'preact';
 

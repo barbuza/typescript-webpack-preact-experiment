@@ -1,5 +1,5 @@
 import Component from '../components/Component';
-import { connect } from 'mobx-preact';
+import { connect } from 'mobx-preact-alt';
 
 export interface Data {
 

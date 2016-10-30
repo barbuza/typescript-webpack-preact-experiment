@@ -1,4 +1,4 @@
-import { connect } from 'mobx-preact';
+import { connect } from 'mobx-preact-alt';
 import { expr } from 'mobx';
 import * as classnames from 'classnames';
 import Component from './Component';

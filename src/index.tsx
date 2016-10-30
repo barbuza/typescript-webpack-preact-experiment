@@ -1,5 +1,5 @@
 import * as preact from 'preact';
-import { Provider } from 'mobx-preact';
+import { Provider } from 'mobx-preact-alt';
 import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
 import Store from './stores';

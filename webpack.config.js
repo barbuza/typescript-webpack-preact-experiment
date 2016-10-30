@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlPlugin = require('html-webpack-plugin');
+var DashboardPlugin = require('webpack-dashboard/plugin');
 
 module.exports = {
   entry: './src/index',
@@ -34,7 +35,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
-    ])
+    ]),
   ]
 };
 
@@ -46,5 +47,9 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     })
+  );
+} else {
+  module.exports.plugins.push(
+    new DashboardPlugin()
   );
 }

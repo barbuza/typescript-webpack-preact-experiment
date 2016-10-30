@@ -1,4 +1,4 @@
-import { connect } from 'mobx-preact';
+import { connect } from 'mobx-preact-alt';
 import Component from '../components/Component';
 
 export interface Args {

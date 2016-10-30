@@ -1,4 +1,4 @@
-import { connect } from 'mobx-preact';
+import { connect } from 'mobx-preact-alt';
 import Component from './Component';
 import Header from './Header';
 import PagePreloader from './PagePreloader';
