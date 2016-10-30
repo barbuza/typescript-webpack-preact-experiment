@@ -2613,9 +2613,9 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, "mkdirp@>=0.5 0", mkdirp@~0.5.0, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mobx-preact-alt@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/mobx-preact-alt/-/mobx-preact-alt-0.0.2.tgz#1ef380ae19cc9c17fa2c5b7cb9f4d9cf6c33c904"
+mobx-preact-alt@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/mobx-preact-alt/-/mobx-preact-alt-0.0.3.tgz#e3a7d03fae755801dfa1d473df4aab0dfa9735b3"
   dependencies:
     hoist-non-react-statics "^1.2.0"
     invariant "^2.2.1"
@@ -3292,9 +3292,9 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     source-map "^0.5.6"
     supports-color "^3.1.2"
 
-"preact-classless-component@git://github.com/barbuza/preact-classless-component#92f6f75b2f3e8d935e005b09c5626f4db9d2e551":
+"preact-classless-component@git://github.com/barbuza/preact-classless-component.git#92f6f75b2f3e8d935e005b09c5626f4db9d2e551":
   version "1.1.0"
-  resolved "git://github.com/barbuza/preact-classless-component#92f6f75b2f3e8d935e005b09c5626f4db9d2e551"
+  resolved "git://github.com/barbuza/preact-classless-component.git#92f6f75b2f3e8d935e005b09c5626f4db9d2e551"
   dependencies:
     babel-plugin-transform-object-assign "^6.5.0"
     babel-preset-es2015 "^6.6.0"
