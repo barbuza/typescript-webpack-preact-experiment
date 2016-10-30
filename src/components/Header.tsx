@@ -56,13 +56,15 @@ export default class Header extends Component<{}, {}> {
   render() {
     return (
       <header className={styles.root}>
-        <nav>
-          <Link activeClassName={styles.active} className={styles.link} href="/">index</Link>
-          <Link activeClassName={styles.active} className={styles.link} href="/foo">foo</Link>
-          <Link activeClassName={styles.active} className={styles.link} href="/bar/123">bar-123</Link>
-          <Link activeClassName={styles.active} className={styles.link} href="/bar/234">bar-234</Link>
-        </nav>
-        <UserTools />
+        <div className={styles.content}>
+          <nav>
+            <Link activeClassName={styles.active} className={styles.link} href="/">index</Link>
+            <Link activeClassName={styles.active} className={styles.link} href="/foo">foo</Link>
+            <Link activeClassName={styles.active} className={styles.link} href="/bar/123">bar-123</Link>
+            <Link activeClassName={styles.active} className={styles.link} href="/bar/234">bar-234</Link>
+          </nav>
+          <UserTools />
+        </div>
       </header>
     );
   }

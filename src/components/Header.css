@@ -2,6 +2,13 @@
   padding: 1em;
   background: #0F5738;
   color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  width: 960px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,10 +26,6 @@
 
 .link.active {
   background: #499273;
-}
-
-.link:first-child {
-  margin-left: -.5em;
 }
 
 .userTools {

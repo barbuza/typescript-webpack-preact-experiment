@@ -19,7 +19,9 @@ export default class Root extends Component<{}, {}> {
     return (
       <main className={styles.root}>
         <Header />
-        <Content />
+        <div className={styles.content}>
+          <Content />
+        </div>
       </main>
     );
   }
