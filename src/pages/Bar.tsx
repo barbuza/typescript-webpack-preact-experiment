@@ -1,16 +1,16 @@
 import { connect } from 'mobx-preact';
 import Component from '../components/Component';
 
-interface IArgs {
+export interface Args {
   id: string;
 }
 
-interface IData {
+export interface Data {
   spam: string;
 }
 
 @connect
-export default class Bar extends Component<IArgs & IData, {}> {
+export default class Bar extends Component<Args & Data, {}> {
   render() {
     return (
       <div>
@@ -23,8 +23,8 @@ export default class Bar extends Component<IArgs & IData, {}> {
   }
 }
 
-export function fetchData(args: IArgs, callback: (data: IData) => void) {
+export function fetchData(args: Args, callback: (data: Data) => void) {
   setTimeout(() => {
-    callback({ spam: `eggs-${args.id}` });
+    callback({ spam: `spam-${args.id}` });
   }, 1000);
 }

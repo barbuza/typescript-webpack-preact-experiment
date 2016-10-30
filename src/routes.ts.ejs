@@ -1,4 +1,17 @@
-declare function require(path: string): any;
+<% keys.forEach(function(page) { %>
+import Component<%- routeKeys[page] %>, {
+    Args as Args<%- routeKeys[page] %>,
+    Data as Data<%- routeKeys[page] %>,
+    fetchData as fetchData<%- routeKeys[page] %>
+} from <%- JSON.stringify(page) %>;
+<% }); %>
+
+<% keys.forEach(function(page) { %>
+declare function require(path: <%- JSON.stringify(page) %>): {
+    default: typeof Component<%- routeKeys[page] %>,
+    fetchData: typeof fetchData<%- routeKeys[page] %>,
+};
+<% }); %>
 
 declare namespace require {
   function ensure(deps: string[], callback: () => void): void;
@@ -8,8 +21,8 @@ export default [
 <% routes.forEach(function(route, idx) { %>
   {
     pattern: <%- route.path %>,
-    key: <%- route.key %>,
-    load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
+    key: <%- JSON.stringify(route.key) %>,
+    load: (resolve: (mod: IPageModule<Args<%- route.key %>, Data<%- route.key %>>) => void) => {
       require.ensure([<%- route.page %>], () => {
         if (process.env.NODE_ENV === 'production') {
           resolve(require(<%- route.page %>));
@@ -20,6 +33,6 @@ export default [
         }
       });
     }
-  },
+  } as IPageConfig<Args<%- route.key %>, Data<%- route.key %>>,
 <% }); %>
-] as Array<IPageConfig>;
+] as Array<IPageConfig<{}, {}>>;

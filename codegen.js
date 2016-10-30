@@ -10,7 +10,7 @@ const routes = yaml.safeLoad(fs.readFileSync('./src/routes.yml', 'utf-8')).map(r
     routeKeys[route.page] = Object.keys(routeKeys).length.toString();
   }
   return {
-    key: JSON.stringify(routeKeys[route.page]),
+    key: routeKeys[route.page],
     path: JSON.stringify(route.path),
     page: JSON.stringify(route.page)
   };
@@ -18,5 +18,5 @@ const routes = yaml.safeLoad(fs.readFileSync('./src/routes.yml', 'utf-8')).map(r
 
 fs.writeFileSync('./src/routes.ts', ejs.render(
   fs.readFileSync('./src/routes.ts.ejs', 'utf-8'),
-  { routes }
+  { routes, keys: Object.keys(routeKeys), routeKeys }
 ));

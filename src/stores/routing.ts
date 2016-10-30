@@ -27,7 +27,7 @@ export enum RoutingState {
   FETCHING
 }
 
-interface IRoute extends IPageConfig {
+interface IRoute extends IPageConfig<{}, {}> {
   args: {};
 }
 
