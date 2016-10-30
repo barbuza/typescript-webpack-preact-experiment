@@ -1,17 +1,14 @@
 import * as preact from 'preact';
 import { Provider } from 'mobx-preact';
 import { createBrowserHistory } from 'history';
-
-import { Action, RoutingAction } from './actions';
+import { when } from 'mobx';
 import Store from './stores';
+import { RoutingState } from './stores/routing';
+import { Action, RoutingAction } from './actions';
 import Root from './components/Root';
-import Routes from './components/Routes';
-
-const store = new Store();
 
 const history = createBrowserHistory();
-
-store.routing.path = history.location.pathname;
+const store = new Store(history.location.pathname);
 
 history.listen(location => {
   emit(new RoutingAction(location.pathname));
@@ -22,11 +19,16 @@ function emit<T>(action: Action<T>): T {
   return action.react(store);
 }
 
-Routes.enableFetcher(store);
+when(() => store.routing.state === RoutingState.READY, () => {
+  const prealoder = document.getElementById('preloader');
+  if (prealoder) {
+    prealoder.parentNode.removeChild(prealoder);
+  }
 
-preact.render(
-  <Provider store={store} history={history} emit={emit}>
-    <Root />
-  </Provider>,
-  document.body
-);
+  preact.render(
+    <Provider store={store} history={history} emit={emit}>
+      <Root />
+    </Provider>,
+    document.body
+  );
+});

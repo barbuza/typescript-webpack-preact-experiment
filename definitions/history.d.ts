@@ -11,4 +11,5 @@ declare module 'history' {
   }
 
   export function createBrowserHistory(): IHistory;
+  export function createMemoryHistory(): IHistory;
 }

@@ -1,0 +1,35 @@
+.root {
+  padding: 1em;
+  background: #0F5738;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  padding: .5em;
+}
+
+.link:hover {
+  background: #277554;
+}
+
+.link.active {
+  background: #499273;
+}
+
+.link:first-child {
+  margin-left: -.5em;
+}
+
+.userTools {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  margin-left: 1em;
+}

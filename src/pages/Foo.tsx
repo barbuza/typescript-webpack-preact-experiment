@@ -5,9 +5,3 @@ export default class Foo extends Component<{}, {}> {
     return <div>foo</div>;
   }
 }
-
-export function fetchData(_: any, callback: (data: {}) => void) {
-  setTimeout(() => {
-    callback({});
-  }, 1000);
-}

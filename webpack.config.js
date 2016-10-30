@@ -15,15 +15,20 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.tsx?$/,
-      loaders: ['webpack-append?var preact = require("preact")', 'ts']
+      loaders: ['webpack-append?var preact = require("preact")', 'baggage?[file].css=styles' , 'ts']
     }, {
       test: /\.gif$/,
       loaders: ['file']
+    }, {
+      test: /\.css$/,
+      loaders: ['style', 'css?module&importLoaders=1&localIdentName=[name]_[local]_[hash:hex:5]']
     }]
   },
   devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
   plugins: [
-    new HtmlPlugin(),
+    new HtmlPlugin({
+      template: './src/index.html'
+    }),
     new webpack.DefinePlugin({
       'React.createElement': 'preact.h'
     }),

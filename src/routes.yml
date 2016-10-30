@@ -1,11 +1,11 @@
 - path: /
-  page: ../pages/Index
+  page: ./pages/Index
 
 - path: /foo
-  page: ../pages/Foo
+  page: ./pages/Foo
 
 - path: /bar/:id
-  page: ../pages/Bar
+  page: ./pages/Bar
 
 - path: /spam/:id
-  page: ../pages/Bar
+  page: ./pages/Bar

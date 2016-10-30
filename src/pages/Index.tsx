@@ -1,19 +1,9 @@
 import Component from '../components/Component';
 import { connect } from 'mobx-preact';
 
-interface IData {
-  foo: string;
-}
-
 @connect
-export default class Index extends Component<{} & IData, {}> {
+export default class Index extends Component<{}, {}> {
   render() {
-    return <div>index, foo = {this.props.foo}</div>;
+    return <div>index</div>;
   }
-}
-
-export function fetchData(_: any, callback: (data: IData) => void) {
-  setTimeout(() => {
-    callback({ foo: 'bar' });
-  }, 1000);
 }

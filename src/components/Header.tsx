@@ -1,10 +1,8 @@
 import { connect } from 'mobx-preact';
 import { observable } from 'mobx';
-
 import Component from './Component';
 import Link from './Link';
 import { LoginAction, LogoutAction } from '../actions';
-
 
 function onChange(handler: JSX.GenericEventHandler) {
   return {
@@ -36,17 +34,17 @@ class UserTools extends Component<{}, {}> {
   render() {
     if (this.store.auth.user) {
       return (
-        <div>
-          hello {this.store.auth.user.name}
-          <button style={{ marginLeft: 10 }} onClick={() => this.emit(new LogoutAction)}>logout</button>
+        <div className={styles.userTools}>
+          <div>hello {this.store.auth.user.name}</div>
+          <button className={styles.button} onClick={() => this.emit(new LogoutAction)}>logout</button>
         </div>
       );
     }
 
     return (
-      <div>
+      <div className={styles.userTools}>
         <input placeholder='username' value={this.usernameInput} {...onChange(this.setUsername.bind(this)) } />
-        <button style={{ marginLeft: 10 }} onClick={this.login.bind(this)}>login</button>
+        <button className={styles.button} onClick={this.login.bind(this)}>login</button>
       </div>
     );
   }
@@ -57,14 +55,14 @@ export default class Header extends Component<{}, {}> {
 
   render() {
     return (
-      <header>
-        <UserTools />
+      <header className={styles.root}>
         <nav>
-          <Link href="/" style={{ marginRight: 10 }}>index</Link>
-          <Link href="/foo" style={{ marginRight: 10 }}>foo</Link>
-          <Link href="/bar/123" style={{ marginRight: 10 }}>bar 123</Link>
-          <Link href="/bar/234" style={{ marginRight: 10 }}>bar 234</Link>
+          <Link activeClassName={styles.active} className={styles.link} href="/">index</Link>
+          <Link activeClassName={styles.active} className={styles.link} href="/foo">foo</Link>
+          <Link activeClassName={styles.active} className={styles.link} href="/bar/123">bar-123</Link>
+          <Link activeClassName={styles.active} className={styles.link} href="/bar/234">bar-234</Link>
         </nav>
+        <UserTools />
       </header>
     );
   }

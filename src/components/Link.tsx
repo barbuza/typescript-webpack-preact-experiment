@@ -1,11 +1,18 @@
+import { connect } from 'mobx-preact';
+import * as classnames from 'classnames';
 import Component from './Component';
+import { omit } from '../utils';
 
-export default class Link extends Component<{ href: string } & JSX.HTMLAttributes, {}> {
+@connect
+export default class Link extends Component<{ href: string, activeClassName?: string } & JSX.HTMLAttributes, {}> {
+
   render() {
+    const className = classnames(
+      this.props.className,
+      this.store.routing.path === this.props.href && this.props.activeClassName
+    );
     return (
-      <a {...this.props} onClick={this.handleClick.bind(this)}>
-        {this.props.children}
-      </a>
+      <a {...omit(this.props, 'activeClassName')} onClick={this.handleClick.bind(this)} className={className}/>
     );
   }
 

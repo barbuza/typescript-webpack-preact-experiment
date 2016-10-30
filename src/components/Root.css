@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+}
+
+* {
+  font-family: BlinkMacSystemFont;
+  -webkit-font-smoothing: antialiased;
+}
+
+.root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

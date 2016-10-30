@@ -1,0 +1,19 @@
+declare function require(path: string): any;
+
+declare namespace require {
+  function ensure(deps: string[], callback: () => void): void;
+}
+
+export default [
+<% routes.forEach(function(route, idx) { %>
+  {
+    pattern: <%- route.path %>,
+    key: <%- route.key %>,
+    load: (resolve: (mod: IPageModule<{}, {}>) => void) => {
+      require.ensure([<%- route.page %>], () => {
+        resolve(require(<%- route.page %>));
+      });
+    }
+  },
+<% }); %>
+] as Array<IPageConfig>;
