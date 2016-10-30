@@ -21,3 +21,7 @@ export function assign<P, V extends P>(value: V, part: P): V {
 export function merge<A, B>(a: A, b: B): A & B {
   return Object.assign({}, a, b);
 }
+
+export function typeCheck<T>(_: T) {
+  // pass
+}

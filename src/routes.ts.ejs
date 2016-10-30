@@ -1,4 +1,6 @@
 /* tslint:disable:no-namespace max-line-length quotemark */
+import { typeCheck } from './utils';
+import { StaticRoute, DynamicRoute, unwrapModule } from './support/routing';
 <% keys.forEach(function(page) { %>
 import Component<%- routeKeys[page] %>, {
 <% if (!routes.find(function(route) { return route.key === routeKeys[page] }).static) {-%>
@@ -17,31 +19,8 @@ declare namespace require {
   function ensure(deps: string[], callback: () => void): void;
 }
 
-export class StaticRoute<D> {
-  constructor(
-    public pattern: string,
-    public key: string,
-    public load: (resolve: (mod: IStaticPageModule<D>) => void) => void
-  ) { }
-}
-
-export class DynamicRoute<A, D> {
-  constructor(
-    public pattern: string,
-    public key: string,
-    public load: (resolve: (mod: IDynamicPageModule<A, D>) => void) => void
-  ) { }
-}
-
-export const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];
-
-function unwrapModule<A, B>(mod: { default: A, fetchData?: B }): { component: A, fetchData?: B } {
-  return { component: mod.default, fetchData: mod.fetchData };
-}
-
-export function typeCheck<T>(_: T) {
-  // pass
-}
+const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];
+export default routes;
 <% routes.forEach(function(route, idx) { %>
 <% if (!route.static) { -%>
 typeCheck<Args<%- route.key %>>({} as <%- route.args %>);

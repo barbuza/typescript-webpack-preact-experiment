@@ -1,6 +1,7 @@
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
-import { routes, StaticRoute, DynamicRoute } from '../routes';
+import routes from '../routes';
+import { StaticRoute, DynamicRoute } from '../support/routing';
 import { h } from 'preact';
 
 function match(path: string, pattern: string): {} | null {
