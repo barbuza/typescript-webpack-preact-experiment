@@ -6,7 +6,7 @@ export default class Store {
   public readonly routing: Routing;
 
   constructor(path: string) {
-    this.auth = new Auth;
+    this.auth = new Auth();
     this.routing = new Routing(path);
   }
 }

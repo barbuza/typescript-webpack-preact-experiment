@@ -1,5 +1,7 @@
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
-import routes from '../routes';
+import { merge } from '../utils';
+import { routes, StaticRoute, DynamicRoute } from '../routes';
+import { h } from 'preact';
 
 function match(path: string, pattern: string): {} | null {
   if (pattern.indexOf(':') === -1) {
@@ -27,8 +29,9 @@ export enum RoutingState {
   FETCHING
 }
 
-interface IRoute extends IPageConfig<{}, {}> {
+interface IMatch {
   args: {};
+  route: StaticRoute<{}> | DynamicRoute<{}, {}>;
 }
 
 export default class Routing {
@@ -48,51 +51,46 @@ export default class Routing {
   }
 
   @computed
-  public get data(): {} | null {
-    if (this.fetcher.path && this.path === this.fetcher.path && this.fetcher.data) {
-      return this.fetcher.data;
+  public get route(): JSX.Element | null {
+    if (this.data && this.component) {
+      return h(this.component, this.data);
     }
     return null;
   }
 
   @computed
-  public get component(): preact.ComponentConstructor<{}, {}> | null {
-    if (this.route) {
-      if (this.modules.has(this.route.key)) {
-        return this.modules.get(this.route.key).default;
+  protected get data(): {} | null {
+    if (this.match && this.fetcher.data) {
+      return merge(this.match.args, this.fetcher.data);
+    }
+    return null;
+  }
+
+  @computed
+  protected get component(): preact.ComponentConstructor<{}, {}> | null {
+    if (this.match) {
+      if (this.modules.has(this.match.route.key)) {
+        return this.modules.get(this.match.route.key).component;
       }
     }
     return null;
   }
 
-  @computed
-  public get args(): {} | null {
-    if (this.route) {
-      return this.route.args;
-    }
-    return null;
-  }
-
   @observable
-  protected modules = asMap({} as { [key: string]: IPageModule<{}, {}> });
+  protected modules = asMap({} as { [key: string]: IStaticPageModule<{}> | IDynamicPageModule<{}, {}> });
 
   @observable
   protected fetcher = observable({
+    data: asReference(null) as {} | null,
     path: null as string | null,
-    data: asReference(null) as {} | null
   });
 
   @computed
-  protected get route(): IRoute | null {
+  protected get match(): IMatch | null {
     for (const route of routes) {
       const args = match(this.path, route.pattern);
       if (args) {
-        return {
-          pattern: route.pattern,
-          load: route.load,
-          key: route.key,
-          args
-        };
+        return { route, args };
       }
     }
     return null;
@@ -107,24 +105,33 @@ export default class Routing {
   }
 
   protected resolve() {
-    const route = this.route;
-    if (route) {
-      if (!this.required[route.key]) {
-        this.required[route.key] = true;
-        route.load(mod => {
-          this.modules.set(route.key, {
-            default: asReference(mod.default),
-            fetchData: asReference(mod.fetchData)
+    const match = this.match;
+    if (match) {
+      if (!this.required[match.route.key]) {
+        this.required[match.route.key] = true;
+        if (match.route instanceof StaticRoute) {
+          match.route.load(mod => {
+            this.modules.set(match.route.key, {
+              component: asReference(mod.component),
+              fetchData: asReference(mod.fetchData),
+            });
           });
-        });
+        } else if (match.route instanceof DynamicRoute) {
+          match.route.load(mod => {
+            this.modules.set(match.route.key, {
+              component: asReference(mod.component),
+              fetchData: asReference(mod.fetchData),
+            });
+          });
+        }
       }
     }
   }
 
   protected fetch() {
     const path = this.path;
-    if (this.route && this.modules.get(this.route.key) && path !== this.fetcher.path) {
-      const fetchData = this.modules.get(this.route.key).fetchData;
+    if (this.path && this.match && this.modules.get(this.match.route.key) && path !== this.fetcher.path) {
+      const fetchData = this.modules.get(this.match.route.key).fetchData;
       if (!fetchData) {
         transaction(() => {
           this.fetcher.path = path;
@@ -135,11 +142,25 @@ export default class Routing {
           this.fetcher.path = path;
           this.fetcher.data = null;
         });
-        fetchData(this.route.args, data => {
-          if (this.fetcher.path === path) {
-            this.fetcher.data = data;
+        if (this.match.route instanceof StaticRoute) {
+          const mod = this.modules.get(this.match.route.key) as IStaticPageModule<{}>;
+          if (mod.fetchData) {
+            mod.fetchData(data => {
+              if (this.fetcher.path === path) {
+                this.fetcher.data = data;
+              }
+            });
           }
-        });
+        } else if (this.match.route instanceof DynamicRoute) {
+          const mod = this.modules.get(this.match.route.key) as IDynamicPageModule<{}, {}>;
+          if (mod.fetchData) {
+            mod.fetchData(this.match.args, data => {
+              if (this.fetcher.path === path) {
+                this.fetcher.data = data;
+              }
+            });
+          }
+        }
       }
     }
   }

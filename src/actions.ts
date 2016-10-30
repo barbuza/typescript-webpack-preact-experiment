@@ -1,12 +1,12 @@
 import Store from './stores';
 
-export interface Action<T> {
+export interface IAction<T> {
 
   react(store: Store): T;
 
 }
 
-export class LoginAction implements Action<void> {
+export class LoginAction implements IAction<void> {
 
   protected name: string;
 
@@ -14,15 +14,15 @@ export class LoginAction implements Action<void> {
     this.name = name;
   }
 
-  react(store: Store) {
+  public react(store: Store) {
     store.auth.user = { name: this.name };
   }
 
 }
 
-export class LogoutAction implements Action<void> {
+export class LogoutAction implements IAction<void> {
 
-  react(store: Store) {
+  public react(store: Store) {
     store.auth.user = null;
   }
 

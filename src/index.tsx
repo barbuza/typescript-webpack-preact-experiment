@@ -4,7 +4,7 @@ import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
 import Store from './stores';
 import { RoutingState } from './stores/routing';
-import { Action } from './actions';
+import { IAction } from './actions';
 import Root from './components/Root';
 
 const history = createBrowserHistory();
@@ -14,7 +14,7 @@ history.listen(location => {
   store.routing.path = location.pathname;
 });
 
-function emit<T>(action: Action<T>): T {
+function emit<T>(action: IAction<T>): T {
   console.debug('%cEMIT', 'font-weight: bold; color: white; background: black; padding: 2px 3px 0 3px', action);
   return action.react(store);
 }

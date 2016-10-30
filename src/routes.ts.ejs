@@ -1,38 +1,61 @@
+/* tslint:disable:no-namespace max-line-length quotemark */
 <% keys.forEach(function(page) { %>
 import Component<%- routeKeys[page] %>, {
+<% if (!routes.find(function(route) { return route.key === routeKeys[page] }).static) {-%>
     Args as Args<%- routeKeys[page] %>,
+<% } -%>
     Data as Data<%- routeKeys[page] %>,
-    fetchData as fetchData<%- routeKeys[page] %>
-} from <%- JSON.stringify(page) %>;
-<% }); %>
-
-<% keys.forEach(function(page) { %>
-declare function require(path: <%- JSON.stringify(page) %>): {
+    fetchData as fetchData<%- routeKeys[page] %>,
+} from <%- "'" + page + "'" %>;
+<% }); %><% keys.forEach(function(page) { %>
+declare function require(path: <%- "'" + page + "'" %>): {
     default: typeof Component<%- routeKeys[page] %>,
     fetchData: typeof fetchData<%- routeKeys[page] %>,
 };
 <% }); %>
-
 declare namespace require {
   function ensure(deps: string[], callback: () => void): void;
 }
 
-export default [
+export class StaticRoute<D> {
+  constructor(
+    public pattern: string,
+    public key: string,
+    public load: (resolve: (mod: IStaticPageModule<D>) => void) => void
+  ) { }
+}
+
+export class DynamicRoute<A, D> {
+  constructor(
+    public pattern: string,
+    public key: string,
+    public load: (resolve: (mod: IDynamicPageModule<A, D>) => void) => void
+  ) { }
+}
+
+export const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];
+
+function unwrapModule<A, B>(mod: { default: A, fetchData?: B }): { component: A, fetchData?: B } {
+  return { component: mod.default, fetchData: mod.fetchData };
+}
+
+export function typeCheck<T>(_: T) {
+  // pass
+}
 <% routes.forEach(function(route, idx) { %>
-  {
-    pattern: <%- route.path %>,
-    key: <%- JSON.stringify(route.key) %>,
-    load: (resolve: (mod: IPageModule<Args<%- route.key %>, Data<%- route.key %>>) => void) => {
-      require.ensure([<%- route.page %>], () => {
-        if (process.env.NODE_ENV === 'production') {
-          resolve(require(<%- route.page %>));
-        } else {
-          setTimeout(() => {
-            resolve(require(<%- route.page %>));
-          }, 500);
-        }
-      });
+<% if (!route.static) { -%>
+typeCheck<Args<%- route.key %>>({} as <%- route.args %>);
+<% } -%>
+routes.push(new <%- route.type %>(<%- route.path %>, <%- "'" + route.key + "'" %>, (resolve: (mod: <%- route.modType %>) => void) => {
+  require.ensure([<%- route.page %>], () => {
+    const mod = unwrapModule(require(<%- route.page %>));
+    if (process.env.NODE_ENV === 'production') {
+      resolve(mod);
+    } else {
+      setTimeout(() => {
+        resolve(mod);
+      }, 500);
     }
-  } as IPageConfig<Args<%- route.key %>, Data<%- route.key %>>,
-<% }); %>
-] as Array<IPageConfig<{}, {}>>;
+  });
+}));
+<% }); -%>

@@ -1,0 +1,16 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double",
+      "avoid-escape"
+    ],
+    "max-line-length": [
+      true,
+      180
+    ],
+    "ordered-imports": false
+  }
+}
