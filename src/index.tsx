@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 
-import * as preact from 'preact';
+import { render } from 'preact';
 import { Provider } from 'mobx-preact-alt';
 import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
@@ -27,7 +27,7 @@ when(() => store.routing.state === RoutingState.READY, () => {
     prealoder.parentNode.removeChild(prealoder);
   }
 
-  preact.render(
+  render(
     <Provider store={store} history={history} emit={emit}>
       <Root />
     </Provider>,
