@@ -1,17 +1,15 @@
-import { connect } from 'mobx-preact-alt';
 import Component from '../components/Component';
 
-export interface Args {
+export interface IArgs {
   id: string;
 }
 
-export interface Data {
+export interface IData {
   spam: string;
 }
 
-@connect
-export default class Bar extends Component<Args & Data, {}> {
-  render() {
+export default class Bar extends Component<IArgs & IData, {}> {
+  public render() {
     return (
       <div>
         <div>args:</div>
@@ -23,7 +21,7 @@ export default class Bar extends Component<Args & Data, {}> {
   }
 }
 
-export function fetchData(args: Args, callback: (data: Data) => void) {
+export function fetchData(args: IArgs, callback: (data: IData) => void) {
   setTimeout(() => {
     callback({ spam: `spam-${args.id}` });
   }, 1000);

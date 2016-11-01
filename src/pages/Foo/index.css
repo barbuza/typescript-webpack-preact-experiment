@@ -1,25 +1,32 @@
 .form {
-  width: 14em;
+  margin-top: .5em;
+  width: 13em;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  margin-top: .5em;
+  overflow: hidden;
 }
 
-.input, .form {
-  font-size: 1em;
+  .row + .row {
+    margin-top: .5em;
+  }
+
+.field {
+  flex-grow: 1;
+  flex-shrink: 1;
 }
+
+  .field + .field {
+    margin-left: .5em;
+  }
+
 
 .input {
-  padding: .2em;
-}
-
-.number {
-  width: 14em;
-}
-
-.year, .month, .cvv {
-  width: 3em;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 1em;
+  text-indent: .5em;
+  line-height: 2em;
 }

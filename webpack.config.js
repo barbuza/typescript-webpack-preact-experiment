@@ -1,7 +1,7 @@
+/// <binding />
 const path = require('path');
 const webpack = require('webpack');
 const HtmlPlugin = require('html-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
@@ -24,7 +24,7 @@ module.exports = {
       loaders: ['file']
     }, {
       test: /\.css$/,
-      loaders: ['style', `css?module&importLoaders=1&localIdentName=${selectorName}`]
+      loaders: ['style', 'css?module&importLoaders=1&localIdentName=' + selectorName]
     }]
   },
   devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
@@ -49,9 +49,5 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     })
-  );
-} else {
-  module.exports.plugins.push(
-    new DashboardPlugin()
   );
 }

@@ -5,7 +5,6 @@ export interface IUser {
 }
 
 export default class AuthStore {
-
   @observable
   public user: IUser | null;
 
@@ -34,5 +33,4 @@ export default class AuthStore {
       }
     });
   }
-
 }

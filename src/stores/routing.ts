@@ -1,8 +1,8 @@
+import { h } from 'preact';
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
 import routes from '../routes';
 import { StaticRoute, DynamicRoute } from '../support/routing';
-import { h } from 'preact';
 
 function match(path: string, pattern: string): {} | null {
   if (pattern.indexOf(':') === -1) {
@@ -36,7 +36,6 @@ interface IMatch {
 }
 
 export default class Routing {
-
   @observable
   public path: string;
 
@@ -61,7 +60,7 @@ export default class Routing {
 
   @computed
   protected get data(): {} | null {
-    if (this.match && this.fetcher.data) {
+    if (this.match && this.path === this.fetcher.path && this.fetcher.data) {
       return merge(this.match.args, this.fetcher.data);
     }
     return null;
@@ -170,5 +169,4 @@ export default class Routing {
       }
     }
   }
-
 }

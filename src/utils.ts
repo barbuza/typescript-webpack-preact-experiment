@@ -26,9 +26,11 @@ export function typeCheck<T>(_: T) {
   // pass
 }
 
-export function onChange(handler: (value: string) => void,
-                         format?: (value: string) => string,
-                         forceUpdate?: () => void) {
+export function onChange(
+  handler: (value: string) => void,
+  format?: (value: string) => string,
+  forceUpdate?: () => void
+) {
   function handle(e: Event) {
     const input = e.target as HTMLInputElement;
     let value = input.value || '';
@@ -43,4 +45,3 @@ export function onChange(handler: (value: string) => void,
 
   return { onChange: handle, onInput: handle };
 }
-

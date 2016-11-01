@@ -1,3 +1,7 @@
+*.sln
+*.njsproj
+.gitattributes
+.vs
 /.env
 /.vscode
 /.idea

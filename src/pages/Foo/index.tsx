@@ -1,36 +1,37 @@
-import { observable } from 'mobx';
+import { observable, IObservableObject } from 'mobx';
 import { connect } from 'mobx-preact-alt';
 import Component from '../../components/Component';
 import { onChange } from '../../utils';
-import * as classnames from 'classnames';
 
-export interface Data {
+export interface IData {
 
 }
 
 interface IInputProps {
   form: {
-    number: string;
+    num: string;
     month: string;
     year: string;
     cvv: string;
-  };
-  field: 'number' | 'year' | 'month' | 'cvv';
+  } & IObservableObject;
+  field: 'num' | 'year' | 'month' | 'cvv';
   format?: (val: string) => string;
   placeholder: string;
 }
 
 @connect
-class Input extends Component<IInputProps, {}> {
+class Field extends Component<IInputProps, {}> {
 
-  render() {
+  public render() {
     return (
-      <input
-        class={classnames(styles.input, styles[this.props.field])}
-        placeholder={this.props.placeholder}
-        value={this.props.form[this.props.field]}
-        {...onChange(val => this.props.form[this.props.field] = val, this.props.format, () => this.forceUpdate()) }
-      />
+      <div class={styles.field}>
+        <input
+          class={styles.input}
+          placeholder={this.props.placeholder}
+          value={this.props.form[this.props.field]}
+          {...onChange(val => this.props.form[this.props.field] = val, this.props.format, () => this.forceUpdate()) }
+          />
+      </div>
     );
   }
 
@@ -44,33 +45,32 @@ function cardNumber(val: string) {
 }
 
 function digits(length: number) {
-  return function (val: string) {
+  return (val: string) => {
     return val.replace(/[^\d]/g, '').substring(0, length);
-  }
+  };
 }
 
-export default class Foo extends Component<Data, {}> {
+export default class Foo extends Component<IData, {}> {
 
-  @observable
-  protected form = {
-    number: '',
+  protected form = observable({
+    num: '',
     month: '',
     year: '',
-    cvv: ''
-  };
+    cvv: '',
+  });
 
-  render() {
+  public render() {
     return (
-      <div>
+      <div class={styles.root}>
         form example
         <div class={styles.form}>
           <div class={styles.row}>
-            <Input placeholder="CARD NUMBER" form={this.form} field="number" format={cardNumber}/>
+            <Field placeholder="CARD NUMBER" form={this.form} field="num" format={cardNumber} />
           </div>
           <div class={styles.row}>
-            <Input placeholder="MM" form={this.form} field="month" format={digits(2)}/>
-            <Input placeholder="YY" form={this.form} field="year" format={digits(2)}/>
-            <Input placeholder="CVV" form={this.form} field="cvv" format={digits(3)}/>
+            <Field placeholder="MM" form={this.form} field="month" format={digits(2)} />
+            <Field placeholder="YY" form={this.form} field="year" format={digits(2)} />
+            <Field placeholder="CVV" form={this.form} field="cvv" format={digits(3)} />
           </div>
         </div>
       </div>
@@ -78,6 +78,6 @@ export default class Foo extends Component<Data, {}> {
   }
 }
 
-export function fetchData(resolve: (data: Data) => void) {
+export function fetchData(resolve: (data: IData) => void) {
   resolve({});
 }

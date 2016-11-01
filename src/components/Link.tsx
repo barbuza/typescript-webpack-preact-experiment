@@ -5,19 +5,18 @@ import Component from './Component';
 import { omit } from '../utils';
 
 @connect
-export default class Link extends Component<{ href: string, activeClassName?: string } & JSX.HTMLAttributes, {}> {
-
-  render() {
+export default class Link extends Component<{ href: string, activeClass?: string } & JSX.HTMLAttributes, {}> {
+  public render() {
     const className = classnames(
       this.props.class,
-      expr(() => this.store.routing.path === this.props.href) && this.props.activeClassName
+      expr(() => this.store.routing.path === this.props.href) && this.props.activeClass
     );
     return (
-      <a {...omit(this.props, 'activeClassName')} onClick={this.handleClick.bind(this)} class={className}/>
+      <a {...omit(this.props, 'activeClass') } onClick={this.handleClick.bind(this)} class={className} />
     );
   }
 
-  handleClick(e: MouseEvent) {
+  protected handleClick(e: MouseEvent) {
     e.preventDefault();
     if (this.store.routing.path !== this.props.href) {
       this.context.mobxStores.history.push(this.props.href);

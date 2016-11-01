@@ -1,17 +1,14 @@
 import Component from '../components/Component';
-import { connect } from 'mobx-preact-alt';
 
-export interface Data {
-
+export interface IData {
 }
 
-@connect
-export default class Index extends Component<Data, {}> {
-  render() {
+export default class Index extends Component<IData, {}> {
+  public render() {
     return <div>index</div>;
   }
 }
 
-export function fetchData(resolve: (data: Data) => void) {
+export function fetchData(resolve: (data: IData) => void) {
   resolve({});
 }

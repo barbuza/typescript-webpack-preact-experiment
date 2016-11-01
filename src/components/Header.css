@@ -2,7 +2,6 @@
   padding: 1em;
   background: #0F5738;
   color: #fff;
-  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -20,13 +19,13 @@
   padding: .5em;
 }
 
-.link:hover {
-  background: #277554;
-}
+  .link:hover {
+    background: #277554;
+  }
 
-.link.active {
-  background: #499273;
-}
+  .link.active {
+    background: #499273;
+  }
 
 .userTools {
   display: flex;

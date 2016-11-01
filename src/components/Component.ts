@@ -4,7 +4,6 @@ import { IContext } from '../context';
 import Store from '../stores';
 
 abstract class Component<P, S> extends PreactComponent<P, S> {
-
   protected readonly context: IContext;
 
   protected get store(): Store {
@@ -18,7 +17,6 @@ abstract class Component<P, S> extends PreactComponent<P, S> {
   protected forceUpdate() {
     this.setState({} as S);
   }
-
 }
 
 export default Component;

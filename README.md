@@ -15,7 +15,6 @@
 
 ## usage
 
-- `yarn install`
+- `yarn install` or `npm install`
 - `./node_modules/.bin/typings install`
-- `node codegen`
 - `npm start`

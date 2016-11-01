@@ -1,5 +1,4 @@
 declare module 'history' {
-
   interface ILocation {
     readonly pathname: string;
   }
