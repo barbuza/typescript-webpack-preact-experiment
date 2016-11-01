@@ -14,10 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitThis": true,
-    "newLine": "LF"
-  },
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+    "newLine": "LF",
+    "typeRoots": ["node_modules/@types", "node_modules"],
+    "types": ["node", "preact"]
+  }
 }

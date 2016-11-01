@@ -16,5 +16,4 @@
 ## usage
 
 - `yarn install` or `npm install`
-- `./node_modules/.bin/typings install`
-- `npm start`
+- `gulp dev` or `npm start`
