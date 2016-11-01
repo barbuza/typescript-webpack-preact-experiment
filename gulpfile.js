@@ -1,4 +1,5 @@
-﻿const gulp = require('gulp');
+﻿const path = require('path');
+const gulp = require('gulp');
 const gutil = require('gulp-util');
 const tslint = require('gulp-tslint');
 const stylish = require('tslint-stylish');
@@ -15,11 +16,15 @@ gulp.task('tsc', () => {
 });
 
 gulp.task('tslint', () => {
-  gulp.src('src/**/*.ts?')
-    .pipe(tslint())
-    .pipe(tslint.report(stylish, {
-      emitError: false,
-      sort: true
+  gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
+    .pipe(tslint({
+      formatter: 'stylish',
+      formattersDir: path.resolve('node_modules/tslint-stylish'),
+    }))
+    .pipe(tslint.report({
+      emitError: true,
+      sort: true,
+      summarizeFailureOutput: true
     }));
 });
 
