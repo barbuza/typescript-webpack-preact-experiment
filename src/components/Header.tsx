@@ -1,7 +1,7 @@
 import { connect } from 'mobx-preact-alt';
 import { observable } from 'mobx';
-import Component from './Component';
-import Link from './Link';
+import { Component } from './Component';
+import { Link } from './Link';
 import { LoginAction, LogoutAction } from '../actions';
 import { onChange } from '../utils';
 
@@ -36,7 +36,7 @@ class UserTools extends Component<{}, {}> {
   }
 }
 
-export default class Header extends Component<{}, {}> {
+export class Header extends Component<{}, {}> {
   public render() {
     return (
       <header class={styles.root}>

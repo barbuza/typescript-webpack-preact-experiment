@@ -14,6 +14,6 @@ export class DynamicRoute<A, D> {
   ) { }
 }
 
-export function unwrapModule<A, B>(mod: { default: A, fetchData?: B }): { component: A, fetchData?: B } {
-  return { component: mod.default, fetchData: mod.fetchData };
+export function unwrapModule<A, B>(mod: { Page: A, fetchData: B }): { component: A, fetchData?: B } {
+  return { component: mod.Page, fetchData: mod.fetchData };
 }

@@ -1,11 +1,11 @@
 import { connect } from 'mobx-preact-alt';
 import { expr } from 'mobx';
 import * as classnames from 'classnames';
-import Component from './Component';
+import { Component } from './Component';
 import { omit } from '../utils';
 
 @connect
-export default class Link extends Component<{ href: string, activeClass?: string } & JSX.HTMLAttributes, {}> {
+export class Link extends Component<{ href: string, activeClass?: string } & JSX.HTMLAttributes, {}> {
   public render() {
     const className = classnames(
       this.props.class,

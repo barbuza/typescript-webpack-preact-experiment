@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
-import routes from '../routes';
+import { routes } from '../routes';
 import { StaticRoute, DynamicRoute } from '../support/routing';
 
 function match(path: string, pattern: string): {} | null {
@@ -35,7 +35,7 @@ interface IMatch {
   route: StaticRoute<{}> | DynamicRoute<{}, {}>;
 }
 
-export default class Routing {
+export class Routing {
   @observable
   public path: string;
 

@@ -1,7 +1,7 @@
-import Auth from './auth';
-import Routing from './routing';
+import { Auth } from './auth';
+import { Routing } from './routing';
 
-export default class Store {
+export class Store {
   public readonly auth: Auth;
   public readonly routing: Routing;
 

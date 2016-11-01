@@ -1,4 +1,4 @@
-import Component from '../components/Component';
+import { Component } from '../components/Component';
 
 export interface IArgs {
   id: string;
@@ -8,7 +8,7 @@ export interface IData {
   spam: string;
 }
 
-export default class Bar extends Component<IArgs & IData, {}> {
+export class Page extends Component<IArgs & IData, {}> {
   public render() {
     return (
       <div>

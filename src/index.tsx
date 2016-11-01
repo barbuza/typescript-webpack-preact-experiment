@@ -4,10 +4,10 @@ import * as preact from 'preact';
 import { Provider } from 'mobx-preact-alt';
 import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
-import Store from './stores';
+import { Store } from './stores';
 import { RoutingState } from './stores/routing';
 import { IAction } from './actions';
-import Root from './components/Root';
+import { Root } from './components/Root';
 
 const history = createBrowserHistory();
 const store = new Store(history.location.pathname);

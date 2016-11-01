@@ -1,5 +1,5 @@
 import { IAction } from './actions';
-import Store from './stores';
+import { Store } from './stores';
 import { IHistory } from 'history';
 
 export interface IContext {

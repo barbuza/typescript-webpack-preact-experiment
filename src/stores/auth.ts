@@ -4,7 +4,7 @@ export interface IUser {
   name: string;
 }
 
-export default class AuthStore {
+export class Auth {
   @observable
   public user: IUser | null;
 

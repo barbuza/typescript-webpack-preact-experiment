@@ -5,7 +5,7 @@
       true,
       180
     ],
-    "member-ordering": [ false ],
+    "member-ordering": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "quotemark": [
@@ -13,6 +13,7 @@
       "single",
       "jsx-double",
       "avoid-escape"
-    ]
+    ],
+    "no-default-export": true
   }
 }

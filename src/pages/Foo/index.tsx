@@ -1,6 +1,6 @@
 import { observable, IObservableObject } from 'mobx';
 import { connect } from 'mobx-preact-alt';
-import Component from '../../components/Component';
+import { Component } from '../../components/Component';
 import { onChange } from '../../utils';
 
 export interface IData {
@@ -50,7 +50,7 @@ function digits(length: number) {
   };
 }
 
-export default class Foo extends Component<IData, {}> {
+export class Page extends Component<IData, {}> {
 
   protected form = observable({
     num: '',

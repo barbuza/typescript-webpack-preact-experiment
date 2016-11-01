@@ -2,16 +2,17 @@
 import { typeCheck } from './utils';
 import { StaticRoute, DynamicRoute, unwrapModule } from './support/routing';
 <% keys.forEach(function(page) { %>
-import Component<%- routeKeys[page] %>, {
+import {
+    Page as Component<%- routeKeys[page] %>,
+    fetchData as fetchData<%- routeKeys[page] %>,
 <% if (!routes.find(function(route) { return route.key === routeKeys[page] }).isStatic) {-%>
     IArgs as IArgs<%- routeKeys[page] %>,
 <% } -%>
     IData as IData<%- routeKeys[page] %>,
-    fetchData as fetchData<%- routeKeys[page] %>,
 } from <%- "'" + page + "'" %>;
 <% }); %><% keys.forEach(function(page) { %>
 declare function require(path: <%- "'" + page + "'" %>): {
-    default: typeof Component<%- routeKeys[page] %>,
+    Page: typeof Component<%- routeKeys[page] %>,
     fetchData: typeof fetchData<%- routeKeys[page] %>,
 };
 <% }); %>
@@ -19,15 +20,14 @@ declare namespace require {
   function ensure(deps: string[], callback: () => void): void;
 }
 
-const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];
-export default routes;
+export const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];
 <% routes.forEach(function(route, idx) { %>
 <% if (!route.isStatic) { -%>
 typeCheck<IArgs<%- route.key %>>({} as <%- route.args %>);
 <% } -%>
 routes.push(new <%- route.type %>(<%- route.path %>, <%- "'" + route.key + "'" %>, (resolve: (mod: <%- route.modType %>) => void) => {
   require.ensure([<%- route.page %>], () => {
-    const mod = unwrapModule(require(<%- route.page %>));
+    const mod = unwrapModule<typeof Component<%- route.key %>, typeof fetchData<%- route.key %>>(require(<%- route.page %>));
     if (process.env.NODE_ENV === 'production') {
       resolve(mod);
     } else {

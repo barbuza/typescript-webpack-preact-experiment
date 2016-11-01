@@ -1,7 +1,7 @@
 import { connect } from 'mobx-preact-alt';
-import Component from './Component';
-import Header from './Header';
-import PagePreloader from './PagePreloader';
+import { Component } from './Component';
+import { Header } from './Header';
+import { PagePreloader } from './PagePreloader';
 
 @connect
 class Content extends Component<{}, {}> {
@@ -10,7 +10,7 @@ class Content extends Component<{}, {}> {
   }
 }
 
-export default class Root extends Component<{}, {}> {
+export class Root extends Component<{}, {}> {
   public render() {
     return (
       <main class={styles.root}>
