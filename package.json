@@ -12,6 +12,7 @@
     "classnames": "^2.2.5",
     "css-loader": "^0.25.0",
     "ejs": "^2.5.2",
+    "extract-text-webpack-plugin": "2.0.0-beta.4",
     "file-loader": "^0.9.0",
     "gulp": "^3.9.1",
     "gulp-tslint": "^6.1.2",

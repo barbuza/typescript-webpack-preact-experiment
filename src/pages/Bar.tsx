@@ -1,4 +1,5 @@
 import { Component } from '../components/Component';
+import { JSONView } from '../components/JSONView';
 
 export interface IArgs {
   id: string;
@@ -13,9 +14,9 @@ export class Page extends Component<IArgs & IData, {}> {
     return (
       <div>
         <div>args:</div>
-        <div class={styles.json}>{JSON.stringify({ id: this.props.id })}</div>
+        <JSONView data={{ id: this.props.id }}/>
         <div>data:</div>
-        <div class={styles.json}>{JSON.stringify({ spam: this.props.spam })}</div>
+        <JSONView data={{ spam: this.props.spam }}/>
       </div>
     );
   }

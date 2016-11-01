@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
@@ -19,19 +20,21 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              module: true,
-              localIdentName: selectorName
-            }
-          },
-          'postcss-loader',
-          'sass-loader'
-        ]
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: [
+            {
+              loader: 'css-loader',
+              query: {
+                importLoaders: 1,
+                module: true,
+                localIdentName: selectorName
+              }
+            },
+            'postcss-loader',
+            'sass-loader'
+          ]
+        })
       },
       {
         test: /\.tsx?$/,
@@ -67,7 +70,11 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
-    ])
+    ]),
+    new ExtractTextPlugin({
+      filename: 'styles.css',
+      allChunks: true
+    })
   ]
 };
 
