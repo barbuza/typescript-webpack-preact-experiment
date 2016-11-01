@@ -1,0 +1,25 @@
+.form {
+  width: 14em;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .5em;
+}
+
+.input, .form {
+  font-size: 1em;
+}
+
+.input {
+  padding: .2em;
+}
+
+.number {
+  width: 14em;
+}
+
+.year, .month, .cvv {
+  width: 3em;
+}

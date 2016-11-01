@@ -15,9 +15,9 @@ export default class Bar extends Component<Args & Data, {}> {
     return (
       <div>
         <div>args:</div>
-        <div className={styles.json}>{JSON.stringify({ id: this.props.id })}</div>
+        <div class={styles.json}>{JSON.stringify({ id: this.props.id })}</div>
         <div>data:</div>
-        <div className={styles.json}>{JSON.stringify({ spam: this.props.spam })}</div>
+        <div class={styles.json}>{JSON.stringify({ spam: this.props.spam })}</div>
       </div>
     );
   }

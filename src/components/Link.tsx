@@ -9,11 +9,11 @@ export default class Link extends Component<{ href: string, activeClassName?: st
 
   render() {
     const className = classnames(
-      this.props.className,
+      this.props.class,
       expr(() => this.store.routing.path === this.props.href) && this.props.activeClassName
     );
     return (
-      <a {...omit(this.props, 'activeClassName')} onClick={this.handleClick.bind(this)} className={className}/>
+      <a {...omit(this.props, 'activeClassName')} onClick={this.handleClick.bind(this)} class={className}/>
     );
   }
 

@@ -25,3 +25,22 @@ export function merge<A, B>(a: A, b: B): A & B {
 export function typeCheck<T>(_: T) {
   // pass
 }
+
+export function onChange(handler: (value: string) => void,
+                         format?: (value: string) => string,
+                         forceUpdate?: () => void) {
+  function handle(e: Event) {
+    const input = e.target as HTMLInputElement;
+    let value = input.value || '';
+    if (format) {
+      value = format(value);
+    }
+    handler(value);
+    if (forceUpdate) {
+      forceUpdate();
+    }
+  }
+
+  return { onChange: handle, onInput: handle };
+}
+

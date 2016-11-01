@@ -9,7 +9,7 @@ class Content extends Component<{}, {}> {
     if (this.store.routing.route) {
       return this.store.routing.route;
     }
-    return <div className={styles.loading}><PagePreloader/></div>;
+    return <div class={styles.loading}><PagePreloader/></div>;
   }
 }
 
@@ -17,9 +17,9 @@ export default class Root extends Component<{}, {}> {
 
   render() {
     return (
-      <main className={styles.root}>
+      <main class={styles.root}>
         <Header />
-        <div className={styles.content}>
+        <div class={styles.content}>
           <Content />
         </div>
       </main>

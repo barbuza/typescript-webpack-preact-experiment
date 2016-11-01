@@ -15,6 +15,10 @@ abstract class Component<P, S> extends PreactComponent<P, S> {
     return this.context.mobxStores.emit(action);
   }
 
+  protected forceUpdate() {
+    this.setState({} as S);
+  }
+
 }
 
 export default Component;
