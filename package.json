@@ -7,6 +7,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^6.0.46",
+    "autoprefixer": "^6.5.1",
     "baggage-loader": "^0.2.4",
     "classnames": "^2.2.5",
     "css-loader": "^0.25.0",
@@ -21,7 +22,10 @@
     "js-yaml": "^3.6.1",
     "mobx": "^2.6.0",
     "mobx-preact-alt": "^0.0.3",
+    "node-sass": "^3.10.1",
+    "postcss-loader": "^1.1.0",
     "preact": "^6.3.0",
+    "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "through2": "^2.0.1",
     "ts-loader": "^0.9.0",

@@ -1,7 +1,7 @@
-/// <binding />
 const path = require('path');
 const webpack = require('webpack');
 const HtmlPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
@@ -16,16 +16,46 @@ module.exports = {
     extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']
   },
   module: {
-    loaders: [{
-      test: /\.tsx?$/,
-      loaders: ['webpack-append?var preact = require("preact")', 'baggage?[file].css=styles' , 'ts']
-    }, {
-      test: /\.gif$/,
-      loaders: ['file']
-    }, {
-      test: /\.css$/,
-      loaders: ['style', 'css?module&importLoaders=1&localIdentName=' + selectorName]
-    }]
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              module: true,
+              localIdentName: selectorName
+            }
+          },
+          'postcss-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'webpack-append',
+            query: 'var __preactCreateElement = require("preact").h'
+          },
+          {
+            loader: 'baggage-loader',
+            options: {
+              '[file].scss': 'styles'
+            }
+          },
+          'ts-loader'
+        ]
+      },
+      {
+        test: /\.(gif|jpg|png)$/,
+        use: [
+          'file'
+        ]
+      }
+    ]
   },
   devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
   plugins: [
@@ -33,11 +63,11 @@ module.exports = {
       template: './src/index.html'
     }),
     new webpack.DefinePlugin({
-      'React.createElement': 'preact.h'
+      'React.createElement': '__preactCreateElement'
     }),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
-    ]),
+    ])
   ]
 };
 

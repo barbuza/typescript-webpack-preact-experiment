@@ -17,15 +17,17 @@
   color: #fff;
   text-decoration: none;
   padding: .5em;
-}
 
-  .link:hover {
+  &:hover {
     background: #277554;
+
   }
 
-  .link.active {
+  &.active {
     background: #499273;
+
   }
+}
 
 .userTools {
   display: flex;

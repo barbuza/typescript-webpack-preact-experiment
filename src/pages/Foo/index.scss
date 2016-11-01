@@ -6,21 +6,20 @@
 .row {
   display: flex;
   justify-content: space-between;
-}
 
-  .row + .row {
+  & + .row {
     margin-top: .5em;
   }
+}
 
 .field {
   flex-grow: 1;
   flex-shrink: 1;
-}
 
-  .field + .field {
+  & + .field {
     margin-left: .5em;
   }
-
+}
 
 .input {
   box-sizing: border-box;

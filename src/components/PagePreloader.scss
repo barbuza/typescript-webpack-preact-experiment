@@ -11,28 +11,29 @@
   height: 100%;
   box-sizing: border-box;
   border-radius: 50%;
-}
 
-  .cssloadInner.cssloadOne {
-    left: 0%;
-    top: 0%;
+  &.cssloadOne {
+    left: 0;
+    top: 0;
     animation: cssload-rotate-one 1.15s linear infinite;
     border-bottom: 3px solid rgb(244, 66, 54);
   }
 
-  .cssloadInner.cssloadTwo {
-    right: 0%;
-    top: 0%;
+  &.cssloadTwo {
+    right: 0;
+    top: 0;
     animation: cssload-rotate-two 1.15s linear infinite;
     border-right: 3px solid rgb(33, 149, 243);
   }
 
-  .cssloadInner.cssloadThree {
-    right: 0%;
-    bottom: 0%;
+  &.cssloadThree {
+    right: 0;
+    bottom: 0;
     animation: cssload-rotate-three 1.15s linear infinite;
     border-top: 3px solid rgb(76, 175, 79);
   }
+
+}
 
 @keyframes cssload-rotate-one {
   0% {
