@@ -1,9 +1,76 @@
-﻿const fs = require('fs');
+﻿const path = require('path');
+const mzFs = require('mz/fs');
 const through = require('through2');
-const ejs = require('ejs');
 const yaml = require('js-yaml');
+const typescript = require('typescript');
+const _ = require('lodash');
 
-const template = fs.readFileSync('src/routes.ts.ejs', 'utf-8');
+class PageModule {
+
+  constructor(filename, sourceFile, index, request) {
+    this.index = index;
+    this.request = request;
+
+    const classes = this.findExportedNames(sourceFile, typescript.SyntaxKind.ClassDeclaration);
+    this.className = classes[0];
+    if (classes.length !== 1) {
+      throw new Error(`${filename} contains ${classes.length} exported classes`);
+    }
+
+    const functions = this.findExportedNames(sourceFile, typescript.SyntaxKind.FunctionDeclaration);
+    this.hasData = functions.indexOf('fetchData') !== -1;
+
+    const interfaces = this.findExportedNames(sourceFile, typescript.SyntaxKind.InterfaceDeclaration);
+    if (this.hasData) {
+      if (interfaces.indexOf('IData') === -1) {
+        throw new Error(`${filename} contains fetchData function but doesn't export IData interface`);
+      }
+    }
+    this.hasArgs = interfaces.indexOf('IArgs') !== -1;
+  }
+
+  findExportedNames(sourceFile, nodeKind) {
+    return sourceFile.statements
+      .filter(node => node.kind === nodeKind)
+      .filter(node => typescript.getNodeModifiers(node) === 'export')
+      .map(node => node.name.text);
+  }
+
+}
+
+function getPageModule(request, index, page) {
+  return mzFs.access(request)
+    .then(() => path.resolve(request, 'index.tsx'))
+    .catch(() => `${request}.tsx`)
+    .then(filename =>
+      mzFs.readFile(filename, 'utf-8')
+        .then(content => typescript.createSourceFile(filename, content, typescript.ScriptTarget.ES6))
+        .then(sourceFile => new PageModule(filename, sourceFile, index, page))
+    );
+}
+
+
+function resolveRequest(origin, request) {
+  let result = path.relative(path.dirname(origin), request);
+  if (result[0] !== '.') {
+    result = `./${result}`;
+  }
+  return result;
+}
+
+function isStaticPattern(pattern) {
+  return pattern.indexOf(':') === -1;
+}
+
+function getArgsType(pattern) {
+  const regex = /:\w+/g;
+  let args = [];
+  let match;
+  while (match = regex.exec(pattern)) {
+    args.push(match[0].substr(1));
+  }
+  return `{ ${args.map(name => `${name}: string`).join(', ')} }`;
+}
 
 module.exports = function () {
   return through.obj(function (file, encoding, done) {
@@ -11,36 +78,86 @@ module.exports = function () {
       this.emit('error');
     }
 
-    const routeKeys = {};
-    const routes = yaml.safeLoad(file.contents).map(route => {
-      if (!routeKeys[route.page]) {
-        routeKeys[route.page] = Object.keys(routeKeys).length.toString();
-      }
-      const regex = /:\w+/g;
-      let args = [];
-      let match;
-      while (match = regex.exec(route.path)) {
-        args.push(match[0].substr(1));
-      }
-      const isStatic = !args.length;
-      args = `{ ${args.map(name => `${name}: string`).join(', ')} }`;
-      const key = routeKeys[route.page];
-      return {
-        isStatic,
-        args,
-        type: isStatic ? `StaticRoute<IData${key}>` : `DynamicRoute<IArgs${key}, IData${key}>`,
-        modType: isStatic ? `IStaticPageModule<IData${key}>` : `IDynamicPageModule<IArgs${key}, IData${key}>`,
-        key: routeKeys[route.page],
-        path: `'${route.path}'`,
-        page: `'${route.page}'`
-      };
-    });
+    const config = yaml.safeLoad(file.contents);
+    const pages = _.uniq(config.map(item => item.page));
+    const pageModules = {};
 
-    file.path = file.path.replace(/\.yml/, '.ts');
-    file.contents = new Buffer(ejs.render(template, {
-      routes, keys: Object.keys(routeKeys), routeKeys
-    }));
-  
-    done(null, file);
+    const lines = [];
+    const write = lines.push.bind(lines);
+
+    Promise.all(pages.map((page, index) => {
+      const request = path.resolve(path.dirname(file.path), page);
+      return getPageModule(request, index, page).then(mod => pageModules[page] = mod);
+    })).then(() => {
+      const modules = _.sortBy(_.values(pageModules), 'index');
+      const imports = [
+        `import { typeCheck } from ${JSON.stringify(resolveRequest(file.path, 'src/utils'))};`,
+        `import { StaticRoute, DynamicRoute } from ${JSON.stringify(resolveRequest(file.path, 'src/support/routing'))};`
+      ];
+      const declarations = [
+        'declare namespace require {\n  function ensure(deps: string[], callback: () => void): void;\n}'
+      ];
+
+      modules.forEach(mod => {
+        const moduleImports = [`${mod.className} as Page${mod.index}`];
+        if (mod.hasData) {
+          moduleImports.push(
+            `fetchData as fetchData${mod.index}`,
+            `IData as IData${mod.index}`
+          );
+        }
+        if (mod.hasArgs) {
+          moduleImports.push(`IArgs as IArgs${mod.index}`);
+        }
+        imports.push(`import { ${moduleImports.join(', ')} } from ${JSON.stringify(mod.request)};`);
+
+        if (mod.hasData) {
+          declarations.push(`declare function require(path: ${JSON.stringify(mod.request)}): { ${mod.className}: typeof Page${mod.index}, fetchData: typeof fetchData${mod.index} };`);
+        } else {
+          declarations.push(`declare function require(path: ${JSON.stringify(mod.request)}): { ${mod.className}: typeof Page${mod.index} };`);
+        }
+      });
+
+      write('/* tslint:disable */');
+      write(imports.join('\n'));
+      write('\n');
+      write(declarations.join('\n'));
+      write('\n');
+
+      modules.forEach(mod => {
+        const dataType = mod.hasData ? `IData${mod.index}` : `{}`;
+        const moduleType = !mod.hasArgs ? `IStaticPageModule<${dataType}>` : `IDynamicPageModule<IArgs${mod.index}, ${dataType}>`;
+        write(`function getPage${mod.index}(resolve: (mod: ${moduleType}) => void) {`);
+        write(`  require.ensure([${JSON.stringify(mod.request)}], () => {`);
+        write(`    const mod = require(${JSON.stringify(mod.request)});`);
+        if (mod.hasData) {
+          write(`    resolve({ component: mod.${mod.className}, fetchData: mod.fetchData });`);
+        } else {
+          write(`    resolve({ component: mod.${mod.className} });`);
+        }
+        write(`  });`);
+        write(`}\n`);
+      });
+
+      write('export const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];');
+
+      config.forEach(item => {
+        const mod = pageModules[item.page];
+        const isStatic = isStaticPattern(item.path);
+        if (!isStatic) {
+          if (!mod.hasArgs) {
+            throw new Error(`can't connect ${item.path} to ${item.page}: IArgs isn't exported`);
+          }
+          write(`typeCheck<IArgs${mod.index}>({} as ${getArgsType(item.path)});`);
+        }
+        const dataType = mod.hasData ? `IData${mod.index}` : `{}`;
+        const routeClass = isStatic ? `StaticRoute<${dataType}>` : `DynamicRoute<IArgs${mod.index}, ${dataType}>`;
+        write(`routes.push(new ${routeClass}(${JSON.stringify(item.path)}, ${JSON.stringify(mod.index.toString())}, getPage${mod.index}));\n`);
+      });
+
+      file.path = file.path.replace(/\.yml/, '.ts');
+      file.contents = new Buffer(lines.join('\n'));
+      done(null, file);
+    });
   });
 };

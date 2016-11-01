@@ -9,7 +9,7 @@ export interface IData {
   spam: string;
 }
 
-export class Page extends Component<IArgs & IData, {}> {
+export class Bar extends Component<IArgs & IData, {}> {
   public render() {
     return (
       <div>

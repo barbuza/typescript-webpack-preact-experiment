@@ -1,14 +1,7 @@
 import { Component } from '../components/Component';
 
-export interface IData {
-}
-
-export class Page extends Component<IData, {}> {
+export class Index extends Component<{}, {}> {
   public render() {
     return <div>index</div>;
   }
-}
-
-export function fetchData(resolve: (data: IData) => void) {
-  resolve({});
 }

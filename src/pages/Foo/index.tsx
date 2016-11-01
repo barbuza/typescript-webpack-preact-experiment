@@ -4,7 +4,7 @@ import { Component } from '../../components/Component';
 import { onChange } from '../../utils';
 
 export interface IData {
-
+  assert: boolean;
 }
 
 interface IInputProps {
@@ -50,7 +50,7 @@ function digits(length: number) {
   };
 }
 
-export class Page extends Component<IData, {}> {
+export class Foo extends Component<IData, {}> {
 
   protected form = observable({
     num: '',
@@ -60,6 +60,9 @@ export class Page extends Component<IData, {}> {
   });
 
   public render() {
+    if (!this.props.assert) {
+      throw new Error('assert');
+    }
     return (
       <div class={styles.root}>
         form example
@@ -79,5 +82,5 @@ export class Page extends Component<IData, {}> {
 }
 
 export function fetchData(resolve: (data: IData) => void) {
-  resolve({});
+  resolve({ assert: true });
 }
