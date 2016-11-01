@@ -1,7 +1,9 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlPlugin = require('html-webpack-plugin');
-var DashboardPlugin = require('webpack-dashboard/plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlPlugin = require('html-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
+
+const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
 module.exports = {
   entry: './src/index',
@@ -22,7 +24,7 @@ module.exports = {
       loaders: ['file']
     }, {
       test: /\.css$/,
-      loaders: ['style', 'css?module&importLoaders=1&localIdentName=[name]_[local]_[hash:hex:5]']
+      loaders: ['style', `css?module&importLoaders=1&localIdentName=${selectorName}`]
     }]
   },
   devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
