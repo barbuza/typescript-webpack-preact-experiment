@@ -26,6 +26,7 @@ module.exports = {
             {
               loader: 'css-loader',
               query: {
+                minimize: process.env.NODE_ENV === 'production',
                 importLoaders: 1,
                 module: true,
                 localIdentName: selectorName
@@ -72,7 +73,7 @@ module.exports = {
       'NODE_ENV'
     ]),
     new ExtractTextPlugin({
-      filename: 'styles.css',
+      filename: '[name].css',
       allChunks: true
     })
   ]
