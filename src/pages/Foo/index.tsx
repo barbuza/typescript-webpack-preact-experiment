@@ -1,5 +1,6 @@
+import * as React from 'react';
 import { observable, IObservableObject } from 'mobx';
-import { connect } from 'mobx-preact-alt';
+import { observer } from 'mobx-react';
 import { Component } from '../../components/Component';
 import { onChange } from '../../utils';
 
@@ -19,14 +20,14 @@ interface IInputProps {
   placeholder: string;
 }
 
-@connect
+@observer
 class Field extends Component<IInputProps, {}> {
 
   public render() {
     return (
-      <div class={styles.field}>
+      <div className={styles.field}>
         <input
-          class={styles.input}
+          className={styles.input}
           placeholder={this.props.placeholder}
           value={this.props.form[this.props.field]}
           {...onChange(val => this.props.form[this.props.field] = val, this.props.format, () => this.forceUpdate()) }
@@ -64,13 +65,13 @@ export class Foo extends Component<IData, {}> {
       throw new Error('assert');
     }
     return (
-      <div class={styles.root}>
+      <div className={styles.root}>
         form example
-        <div class={styles.form}>
-          <div class={styles.row}>
+        <div className={styles.form}>
+          <div className={styles.row}>
             <Field placeholder="CARD NUMBER" form={this.form} field="num" format={cardNumber} />
           </div>
-          <div class={styles.row}>
+          <div className={styles.row}>
             <Field placeholder="MM" form={this.form} field="month" format={digits(2)} />
             <Field placeholder="YY" form={this.form} field="year" format={digits(2)} />
             <Field placeholder="CVV" form={this.form} field="cvv" format={digits(3)} />

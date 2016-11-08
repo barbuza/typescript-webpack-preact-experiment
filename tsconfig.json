@@ -16,6 +16,6 @@
     "noImplicitThis": true,
     "newLine": "LF",
     "typeRoots": ["node_modules/@types", "node_modules"],
-    "types": ["node", "preact"]
+    "types": ["node", "react"]
   }
 }

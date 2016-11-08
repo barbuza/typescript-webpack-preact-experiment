@@ -41,10 +41,6 @@ module.exports = {
         test: /\.tsx?$/,
         use: [
           {
-            loader: 'webpack-append',
-            query: 'var __preactCreateElement = require("preact").h'
-          },
-          {
             loader: 'baggage-loader',
             options: {
               '[file].scss': 'styles'
@@ -65,9 +61,6 @@ module.exports = {
   plugins: [
     new HtmlPlugin({
       template: './src/index.html'
-    }),
-    new webpack.DefinePlugin({
-      'React.createElement': '__preactCreateElement'
     }),
     new webpack.EnvironmentPlugin([
       'NODE_ENV'

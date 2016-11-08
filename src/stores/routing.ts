@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import * as React from 'react';
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
 import { routes } from '../routes';
@@ -53,7 +53,7 @@ export class Routing {
   @computed
   public get route(): JSX.Element | null {
     if (this.data && this.component) {
-      return h(this.component, this.data);
+      return React.createElement(this.component, this.data);
     }
     return null;
   }
@@ -67,7 +67,7 @@ export class Routing {
   }
 
   @computed
-  protected get component(): preact.ComponentConstructor<{}, {}> | null {
+  protected get component(): React.ComponentClass<{}> | null {
     if (this.match) {
       if (this.modules.has(this.match.route.key)) {
         return this.modules.get(this.match.route.key).component;

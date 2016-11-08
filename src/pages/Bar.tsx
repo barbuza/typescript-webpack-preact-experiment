@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Component } from '../components/Component';
 import { JSONView } from '../components/JSONView';
 

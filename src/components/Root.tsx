@@ -1,22 +1,23 @@
-import { connect } from 'mobx-preact-alt';
+import * as React from 'react';
+import { observer } from 'mobx-react';
 import { Component } from './Component';
 import { Header } from './Header';
 import { PagePreloader } from './PagePreloader';
 
-@connect
+@observer
 class Content extends Component<{}, {}> {
   public render() {
-    return this.store.routing.route || <div class={styles.loading}><PagePreloader /></div>;
+    return this.store.routing.route || <div className={styles.loading}><PagePreloader /></div>;
   }
 }
 
 export class Root extends Component<{}, {}> {
   public render() {
     return (
-      <main class={styles.root}>
+      <main className={styles.root}>
         <Header />
-        <div class={styles.contentWrapper}>
-          <div class={styles.content}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.content}>
             <Content />
           </div>
         </div>

@@ -1,7 +1,7 @@
 /* tslint:disable:no-console */
-
-import { render } from 'preact';
-import { Provider } from 'mobx-preact-alt';
+import * as React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'mobx-react';
 import { createBrowserHistory } from 'history';
 import { when } from 'mobx';
 import { Store } from './stores';
@@ -31,6 +31,6 @@ when(() => store.routing.state === RoutingState.READY, () => {
     <Provider store={store} history={history} emit={emit}>
       <Root />
     </Provider>,
-    document.body
+    document.getElementById('app')
   );
 });

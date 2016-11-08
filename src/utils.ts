@@ -31,7 +31,7 @@ export function onChange(
   format?: (value: string) => string,
   forceUpdate?: () => void
 ) {
-  function handle(e: Event) {
+  function handle(e: any): void { // ToDo: learn more about type of e
     const input = e.target as HTMLInputElement;
     let value = input.value || '';
     if (format) {
