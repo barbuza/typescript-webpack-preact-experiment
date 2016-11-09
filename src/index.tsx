@@ -34,3 +34,16 @@ when(() => store.routing.state === RoutingState.READY, () => {
     document.getElementById('app')
   );
 });
+
+if (module.hot) {
+  module.hot.accept('./components/Root', () => {
+    const NextRoot = require('./components/Root').Root;
+
+    render(
+      <Provider store={store} history={history} emit={emit}>
+        <NextRoot />
+      </Provider>,
+      document.getElementById('app')
+    );
+  });
+}

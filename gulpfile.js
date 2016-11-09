@@ -40,7 +40,7 @@ function webpackServer(env) {
   process.env.NODE_ENV = env;
   const webpackConfig = require('./webpack.config.js');
   const compiler = webpack(webpackConfig);
-  new WebpackDevServer(compiler, { inline: false, historyApiFallback: true, compress: true, stats: { colors: true } })
+  new WebpackDevServer(compiler, { hot: true, inline: false, historyApiFallback: true, compress: true, stats: { colors: true } })
     .listen(3000, 'localhost', err => {
       if (err) {
         throw new gutil.PluginError('webpack-dev-server', err);

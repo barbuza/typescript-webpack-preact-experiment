@@ -7,7 +7,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
 module.exports = {
-  entry: './src/index',
+  entry: [
+    "react-hot-loader/patch",
+    "webpack-dev-server/client?http://localhost:3000",
+    "webpack/hot/dev-server",
+    './src/index'
+  ],
   output: {
     filename: '[name].js',
     path: path.resolve('build'),
@@ -19,27 +24,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: [
-            {
-              loader: 'css-loader',
-              query: {
-                minimize: process.env.NODE_ENV === 'production',
-                importLoaders: 1,
-                module: true,
-                localIdentName: selectorName
-              }
-            },
-            'postcss-loader',
-            'sass-loader'
-          ]
-        })
-      },
-      {
         test: /\.tsx?$/,
         use: [
+          'react-hot-loader/webpack',
           {
             loader: 'baggage-loader',
             options: {
@@ -65,14 +52,30 @@ module.exports = {
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
     ]),
-    new ExtractTextPlugin({
-      filename: '[name].css',
-      allChunks: true
-    })
+    new webpack.HotModuleReplacementPlugin(),
   ]
 };
-
 if (process.env.NODE_ENV === 'production') {
+  module.exports.module.rules.push({
+    test: /\.scss$/,
+    loader: ExtractTextPlugin.extract({
+      fallbackLoader: 'style-loader',
+      loader: [
+        {
+          loader: 'css-loader',
+          query: {
+            minimize: true,
+            importLoaders: 1,
+            module: true,
+            localIdentName: selectorName
+          }
+        },
+        'postcss-loader',
+        'sass-loader'
+      ]
+    })
+  });
+
   module.exports.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       comments: /a^/,
@@ -81,4 +84,28 @@ if (process.env.NODE_ENV === 'production') {
       }
     })
   );
+
+  module.exports.plugins.push(
+    new ExtractTextPlugin({
+      filename: '[name].css',
+      allChunks: true
+    })
+  );
+} else {
+  module.exports.module.rules.push({
+    test: /\.scss$/,
+    use: [
+      'style-loader',
+      {
+        loader: 'css-loader',
+        query: {
+          importLoaders: 1,
+          module: true,
+          localIdentName: selectorName
+        }
+      },
+      'postcss-loader',
+      'sass-loader'
+    ],
+  });
 }
