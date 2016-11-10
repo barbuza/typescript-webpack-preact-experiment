@@ -7,7 +7,8 @@ module.exports = {
   entry: './src/server',
   output: {
     filename: 'renderPage.js',
-    path: path.resolve('server')
+    path: path.resolve('server'),
+    libraryTarget: 'commonjs2',
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']
