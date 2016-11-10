@@ -8,9 +8,10 @@ import { Store } from './stores';
 import { RoutingState } from './stores/routing';
 import { IAction } from './actions';
 import { Root } from './components/Root';
+import { routes } from './routes';
 
 const history = createBrowserHistory();
-const store = new Store(history.location.pathname);
+const store = new Store(history.location.pathname, routes);
 
 history.listen(location => {
   store.routing.path = location.pathname;
@@ -45,5 +46,9 @@ if (module.hot) {
       </Provider>,
       document.getElementById('app')
     );
+  });
+
+  module.hot.accept('./routes', () => {
+    store.routing.routes = require('./routes').routes;
   });
 }

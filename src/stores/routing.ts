@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
-import { routes } from '../routes';
 import { StaticRoute, DynamicRoute } from '../support/routing';
 
 function match(path: string, pattern: string): {} | null {
@@ -36,8 +35,13 @@ interface IMatch {
 }
 
 export class Routing {
-  @observable
-  public path: string;
+  @observable public path: string;
+  @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>;
+  
+  public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
+    this.required = {};
+    this._routes = routes;
+  }
 
   @computed
   public get state(): RoutingState {
@@ -87,7 +91,7 @@ export class Routing {
 
   @computed
   protected get match(): IMatch | null {
-    for (const route of routes) {
+    for (const route of this._routes) {
       let args = null as {} | null;
       if ((route instanceof StaticRoute) && this.path === route.pattern) {
         args = {};
@@ -103,10 +107,16 @@ export class Routing {
 
   protected required = {} as { [key: string]: boolean };
 
-  constructor(path: string) {
+  constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
     this.path = path;
+    this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
+  }
+
+  public reresolve() {
+    this.required = {};
+    this.resolve();
   }
 
   protected resolve() {

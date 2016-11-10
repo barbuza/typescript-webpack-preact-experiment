@@ -1,3 +1,5 @@
 interface NodeModule {
-  hot: any;
+  hot: {
+    accept: (modulePath: string, callback: () => void) => void,
+  };
 }
