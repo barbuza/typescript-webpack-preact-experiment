@@ -1,5 +1,5 @@
 const renderPage = require('./server/renderPage').renderPage;
 
-renderPage('/bar/123').then(html => {
+renderPage('/').then(html => {
   console.log(html);
 })

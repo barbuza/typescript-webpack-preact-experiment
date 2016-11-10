@@ -2,7 +2,6 @@
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const tslint = require('gulp-tslint');
-const rename = require('gulp-rename');
 const stylish = require('tslint-stylish');
 const typescript = require('gulp-typescript');
 const webpack = require('webpack');
@@ -43,7 +42,9 @@ gulp.task('check', ['codegen', 'tsc', 'tslint']);
 
 function webpackServer(env) {
   process.env.NODE_ENV = env;
-  const clientCompiler = webpack(require('./webpack.client.config.js'));
+
+  const clientConfig = require('./webpack.client.config.js');
+  const clientCompiler = webpack(clientConfig);
   new WebpackDevServer(clientCompiler, {
     hot: true,
     inline: false,
@@ -54,6 +55,14 @@ function webpackServer(env) {
     if (err) {
       throw new gutil.PluginError('webpack-dev-server', err);
     }
+  });
+
+  const serverConfig = Object.assign(require('./webpack.server.config.js'), { watch: true });
+  const serverCompiler = webpack(serverConfig, (err, stats) => {
+    if (err) {
+      throw new gutil.PluginError('webpack-server', err);
+    }
+    gutil.log('[webpack-server]', stats.toString());
   });
 }
 
@@ -71,14 +80,25 @@ gulp.task('webpack', callback => {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
   }
-  const webpackConfig = require('./webpack.client.config.js');
-  webpack(webpackConfig, (err, stats) => {
+
+  const webpackCallback = resolve => (err, stats) => {
     if (err) {
       throw new gutil.PluginError('webpack', err);
     }
     gutil.log('[webpack]', stats.toString());
-    callback();
-  });
+    resolve();
+  };
+  
+  Promise.all([
+    new Promise(resolve => {
+      const webpackConfig = require('./webpack.client.config.js');
+      webpack(webpackConfig, webpackCallback(resolve));
+    }),
+    new Promise(resolve => {
+      const webpackConfig = require('./webpack.server.config.js');
+      webpack(webpackConfig, webpackCallback(resolve));
+    }),
+  ]).then(callback);
 });
 
 gulp.task('default', ['codegen', 'tsc', 'tslint', 'webpack']);
