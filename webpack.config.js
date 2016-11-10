@@ -52,7 +52,6 @@ module.exports = {
     new webpack.EnvironmentPlugin([
       'NODE_ENV'
     ]),
-    new webpack.HotModuleReplacementPlugin(),
   ]
 };
 if (process.env.NODE_ENV === 'production') {
@@ -82,10 +81,7 @@ if (process.env.NODE_ENV === 'production') {
       compress: {
         warnings: false
       }
-    })
-  );
-
-  module.exports.plugins.push(
+    }),
     new ExtractTextPlugin({
       filename: '[name].css',
       allChunks: true
@@ -108,4 +104,8 @@ if (process.env.NODE_ENV === 'production') {
       'sass-loader'
     ],
   });
+  module.exports.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
+  );
 }
