@@ -11,3 +11,5 @@
 /typings
 /.nvmrc
 /src/routes.ts
+/src/serverRoutes.ts
+/server

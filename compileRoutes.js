@@ -72,7 +72,7 @@ function getArgsType(pattern) {
   return `{ ${args.map(name => `${name}: string`).join(', ')} }`;
 }
 
-module.exports = function () {
+module.exports = function (resultFilename, server = false) {
   return through.obj(function (file, encoding, done) {
     if (!file.isBuffer()) {
       this.emit('error');
@@ -128,14 +128,20 @@ module.exports = function () {
         const dataType = mod.hasData ? `IData${mod.index}` : `{}`;
         const moduleType = !mod.hasArgs ? `IStaticPageModule<${dataType}>` : `IDynamicPageModule<IArgs${mod.index}, ${dataType}>`;
         write(`function getPage${mod.index}(resolve: (mod: ${moduleType}) => void) {`);
-        write(`  require.ensure([${JSON.stringify(mod.request)}], () => {`);
+        
+        if(!server) {
+          write(`  require.ensure([${JSON.stringify(mod.request)}], () => {`);
+        }
+        
         write(`    const mod = require(${JSON.stringify(mod.request)});`);
         if (mod.hasData) {
           write(`    resolve({ component: mod.${mod.className}, fetchData: mod.fetchData });`);
         } else {
           write(`    resolve({ component: mod.${mod.className} });`);
         }
-        write(`  });`);
+        if(!server) {
+          write(`  });`);
+        }
         write(`}\n`);
       });
 
@@ -155,7 +161,7 @@ module.exports = function () {
         write(`routes.push(new ${routeClass}(${JSON.stringify(item.path)}, ${JSON.stringify(mod.index.toString())}, getPage${mod.index}));\n`);
       });
 
-      file.path = file.path.replace(/\.yml/, '.ts');
+      file.path = resultFilename; //file.path.replace(/\.yml/, '.ts');
       file.contents = new Buffer(lines.join('\n'));
       done(null, file);
     });
