@@ -2,8 +2,7 @@ const express = require('express');
 const renderPage = require('./server/renderPage').renderPage;
 
 const server = express();
-
-const baseUrl = process.env.DEV_SERVER_URL || '/';
+const baseUrl = process.env.DEV_SERVER_URL || '/build/';
 
 server.use('/build', express.static('build'));
 
@@ -14,13 +13,11 @@ server.use((req, res) => {
   <head>
     <meta charset="UTF-8">
     <title>Webpack App</title>
-    ${baseUrl === '/' ? `<link rel="stylesheet" href="${baseUrl}build/main.css" />` : ''}
+    ${baseUrl === '/build/' ? `<link rel="stylesheet" href="${baseUrl}main.css" />` : ''}
   </head>
   <body>
-    <div id="app">
-      ${html}
-    </div>
-    <script src="${baseUrl}build/main.js" async></script>
+    <div id="app">${html}</div>
+    <script src="${baseUrl}main.js" async></script>
   </body>
 </html>`);
   });

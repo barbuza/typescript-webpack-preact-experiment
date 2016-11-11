@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "gulp dev"
+    "start": "gulp dev & DEV_SERVER_URL=http://localhost:3000/ npm run server",
+    "server": "node server.js"
   },
   "author": "",
   "license": "ISC",

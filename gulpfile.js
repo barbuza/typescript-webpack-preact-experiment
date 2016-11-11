@@ -44,7 +44,7 @@ function webpackServer(env) {
   process.env.NODE_ENV = env;
 
   const clientConfig = require('./webpack.client.config.js');
-  const clientCompiler = webpack(clientConfig);
+  const clientCompiler = webpack(clientConfig({ watch: true }));
   new WebpackDevServer(clientCompiler, {
     hot: true,
     inline: false,
@@ -57,12 +57,12 @@ function webpackServer(env) {
     }
   });
 
-  const serverConfig = Object.assign(require('./webpack.server.config.js'), { watch: true });
-  const serverCompiler = webpack(serverConfig, (err, stats) => {
+  const serverConfig = require('./webpack.server.config.js');
+  webpack(serverConfig({ watch: true }), (err, stats) => {
     if (err) {
       throw new gutil.PluginError('webpack-server', err);
     }
-    gutil.log('[webpack-server]', stats.toString());
+    gutil.log('[webpack-server]', stats.toString({ chunks: false }));
   });
 }
 
@@ -92,11 +92,11 @@ gulp.task('webpack', callback => {
   Promise.all([
     new Promise(resolve => {
       const webpackConfig = require('./webpack.client.config.js');
-      webpack(webpackConfig, webpackCallback(resolve));
+      webpack(webpackConfig({ watch: false }), webpackCallback(resolve));
     }),
     new Promise(resolve => {
       const webpackConfig = require('./webpack.server.config.js');
-      webpack(webpackConfig, webpackCallback(resolve));
+      webpack(webpackConfig({ watch: false }), webpackCallback(resolve));
     }),
   ]).then(() => callback());
 });

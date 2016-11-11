@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'mobx-react';
-import { when, toJSON } from 'mobx';
+import { when } from 'mobx';
 import { Store } from './stores';
 import { RoutingState } from './stores/routing';
 import { IAction } from './actions';
