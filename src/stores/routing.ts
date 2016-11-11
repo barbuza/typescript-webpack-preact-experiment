@@ -36,8 +36,10 @@ interface IMatch {
 
 export class Routing {
   @observable public path: string;
-  @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>;
-  
+  /* tslint:disable */
+  @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
+  /* tslint:enable */
+
   public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
     this.required = {};
     this._routes = routes;
@@ -112,11 +114,6 @@ export class Routing {
     this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
-  }
-
-  public reresolve() {
-    this.required = {};
-    this.resolve();
   }
 
   protected resolve() {

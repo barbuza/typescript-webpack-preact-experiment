@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'mobx-react';
-import { when } from 'mobx';
+import { when, toJSON } from 'mobx';
 import { Store } from './stores';
 import { RoutingState } from './stores/routing';
 import { IAction } from './actions';
@@ -17,15 +17,16 @@ export function renderPage(pathname: string): Promise<string> {
     return action.react(store);
   }
 
-  return new Promise((resolve: (result: string) => void) => {
+  return new Promise((resolve: (result: any) => void) => {
     when(() => store.routing.state === RoutingState.READY, () => {
-      resolve(
+      resolve([
         renderToString(
           <Provider store={store} emit={emit}>
             <Root />
           </Provider>
-        )
-      );
+        ),
+        // toJSON(store),
+      ]);
     });
   });
 

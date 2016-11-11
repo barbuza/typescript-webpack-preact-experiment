@@ -6,16 +6,16 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
 module.exports = {
-  entry: [
-    "react-hot-loader/patch",
-    "webpack-dev-server/client?http://localhost:3000",
-    "webpack/hot/only-dev-server",
+  entry: process.env.NODE_ENV === 'production' ? './src/index' : [
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
     './src/index'
   ],
   output: {
     filename: '[name].js',
     path: path.resolve('build'),
-    publicPath: '/'
+    publicPath: '/build/'
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']

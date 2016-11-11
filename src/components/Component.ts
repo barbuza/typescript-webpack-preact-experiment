@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { IAction } from '../actions';
-// import { IContext } from '../context';
 import { IHistory } from 'history';
 import { Store } from '../stores';
 
 export abstract class Component<P, S> extends React.Component<P, S> {
-  static contextTypes = {
-    mobxStores: React.PropTypes.object.isRequired
+  public static contextTypes = {
+    mobxStores: React.PropTypes.object.isRequired,
   };
 
   protected get store(): Store {

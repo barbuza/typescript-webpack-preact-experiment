@@ -88,7 +88,7 @@ gulp.task('webpack', callback => {
     gutil.log('[webpack]', stats.toString());
     resolve();
   };
-  
+
   Promise.all([
     new Promise(resolve => {
       const webpackConfig = require('./webpack.client.config.js');
@@ -98,7 +98,7 @@ gulp.task('webpack', callback => {
       const webpackConfig = require('./webpack.server.config.js');
       webpack(webpackConfig, webpackCallback(resolve));
     }),
-  ]).then(callback);
+  ]).then(() => callback());
 });
 
 gulp.task('default', ['codegen', 'tsc', 'tslint', 'webpack']);
