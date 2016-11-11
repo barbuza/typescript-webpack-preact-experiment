@@ -1,5 +1,4 @@
 const express = require('express');
-const renderPage = require('./server/renderPage').renderPage;
 
 const server = express();
 const baseUrl = process.env.DEV_SERVER_URL || '/build/';
@@ -7,6 +6,10 @@ const baseUrl = process.env.DEV_SERVER_URL || '/build/';
 server.use('/build', express.static('build'));
 
 server.use((req, res) => {
+  if(baseUrl !== '/build/') {
+    delete require.cache[require.resolve('./server/renderPage')];
+  }
+  const renderPage = require('./server/renderPage').renderPage;
   renderPage(req.url).then(([html]) => {
     res.send(`<!DOCTYPE html>
 <html>
