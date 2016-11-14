@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
 import { merge } from '../utils';
-import { StaticRoute, DynamicRoute } from '../support/routing';
+import { StaticRoute, DynamicRoute, IStaticPageModule, IDynamicPageModule } from '../support/routing';
+
+import { Store } from './';
 
 function match(path: string, pattern: string): {} | null {
   if (pattern.indexOf(':') === -1) {
@@ -39,6 +41,7 @@ export class Routing {
   /* tslint:disable */
   @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
   /* tslint:enable */
+  protected store: Store;
 
   public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
     this.required = {};
@@ -109,8 +112,9 @@ export class Routing {
 
   protected required = {} as { [key: string]: boolean };
 
-  constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
+  constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
     this.path = path;
+    this.store = store;
     this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
@@ -157,7 +161,7 @@ export class Routing {
         if (this.match.route instanceof StaticRoute) {
           const mod = this.modules.get(this.match.route.key) as IStaticPageModule<{}>;
           if (mod.fetchData) {
-            mod.fetchData().then(data => {
+            mod.fetchData(this.store).then(data => {
               if (this.fetcher.path === path) {
                 this.fetcher.data = data;
               }
@@ -166,7 +170,7 @@ export class Routing {
         } else if (this.match.route instanceof DynamicRoute) {
           const mod = this.modules.get(this.match.route.key) as IDynamicPageModule<{}, {}>;
           if (mod.fetchData) {
-            mod.fetchData(this.match.args).then(data => {
+            mod.fetchData(this.match.args, this.store).then(data => {
               if (this.fetcher.path === path) {
                 this.fetcher.data = data;
               }

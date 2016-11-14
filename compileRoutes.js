@@ -92,7 +92,7 @@ module.exports = function (resultFilename, server = false) {
       const modules = _.sortBy(_.values(pageModules), 'index');
       const imports = [
         `import { typeCheck } from ${JSON.stringify(resolveRequest(file.path, 'src/utils'))};`,
-        `import { StaticRoute, DynamicRoute } from ${JSON.stringify(resolveRequest(file.path, 'src/support/routing'))};`
+        `import { StaticRoute, DynamicRoute, IStaticPageModule, IDynamicPageModule } from ${JSON.stringify(resolveRequest(file.path, 'src/support/routing'))};`
       ];
       const declarations = [
         'declare namespace require {\n  function ensure(deps: string[], callback: () => void): void;\n}'

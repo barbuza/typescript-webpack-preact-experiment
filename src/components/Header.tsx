@@ -13,7 +13,7 @@ class UserTools extends Component<{}, {}> {
 
   protected login() {
     if (this.username.length) {
-      this.emit(new LoginAction(this.username));
+      this.store.emit(new LoginAction(this.username));
       this.username = '';
     }
   }
@@ -23,7 +23,7 @@ class UserTools extends Component<{}, {}> {
       return (
         <div className={styles.userTools}>
           <div>hello {this.store.auth.user.name}</div>
-          <button className={styles.button} onClick={() => this.emit(new LogoutAction())}>logout</button>
+          <button className={styles.button} onClick={() => this.store.emit(new LogoutAction())}>logout</button>
         </div>
       );
     }
