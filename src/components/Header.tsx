@@ -29,10 +29,16 @@ class UserTools extends Component<{}, {}> {
     }
 
     return (
-      <div className={styles.userTools}>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          this.login();
+        }}
+        className={styles.userTools}
+      >
         <input placeholder="username" value={this.username} {...onChange(val => this.username = val) } />
-        <button className={styles.button} onClick={this.login.bind(this)}>login</button>
-      </div>
+        <button className={styles.button} type="submit">login</button>
+      </form>
     );
   }
 }
