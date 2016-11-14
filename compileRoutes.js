@@ -143,7 +143,7 @@ module.exports = function (resultFilename, server = false) {
         if(!server) {
           write(`    });`);
         }
-        write(`});\n`);
+        write(`  });`);
         write(`}\n`);
       });
 

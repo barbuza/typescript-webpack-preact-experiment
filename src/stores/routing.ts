@@ -38,15 +38,8 @@ interface IMatch {
 
 export class Routing {
   @observable public path: string;
-  /* tslint:disable */
-  @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
-  /* tslint:enable */
+  @observable public routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
   protected store: Store;
-
-  public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
-    this.required = {};
-    this._routes = routes;
-  }
 
   @computed
   public get state(): RoutingState {
@@ -96,7 +89,7 @@ export class Routing {
 
   @computed
   protected get match(): IMatch | null {
-    for (const route of this._routes) {
+    for (const route of this.routes) {
       let args = null as {} | null;
       if ((route instanceof StaticRoute) && this.path === route.pattern) {
         args = {};
@@ -110,12 +103,10 @@ export class Routing {
     return null;
   }
 
-  protected required = {} as { [key: string]: boolean };
-
   constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
     this.path = path;
     this.store = store;
-    this._routes = routes;
+    this.routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
   }
@@ -123,23 +114,20 @@ export class Routing {
   protected resolve() {
     const match = this.match;
     if (match) {
-      if (!this.required[match.route.key]) {
-        this.required[match.route.key] = true;
-        if (match.route instanceof StaticRoute) {
-          match.route.load(false).then(mod => {
-            this.modules.set(match.route.key, {
-              component: asReference(mod.component),
-              fetchData: asReference(mod.fetchData),
-            });
+      if (match.route instanceof StaticRoute) {
+        match.route.load(false).then(mod => {
+          this.modules.set(match.route.key, {
+            component: asReference(mod.component),
+            fetchData: asReference(mod.fetchData),
           });
-        } else if (match.route instanceof DynamicRoute) {
-          match.route.load(false).then(mod => {
-            this.modules.set(match.route.key, {
-              component: asReference(mod.component),
-              fetchData: asReference(mod.fetchData),
-            });
+        });
+      } else if (match.route instanceof DynamicRoute) {
+        match.route.load(false).then(mod => {
+          this.modules.set(match.route.key, {
+            component: asReference(mod.component),
+            fetchData: asReference(mod.fetchData),
           });
-        }
+        });
       }
     }
   }
