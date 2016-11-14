@@ -1,9 +1,9 @@
 declare interface IDynamicPageModule<A, D> {
   component: React.ComponentClass<A & D>;
-  fetchData?: (data: A, resolve: (data: D) => void) => void;
+  fetchData?: (data: A) => Promise<D>;
 }
 
 declare interface IStaticPageModule<D> {
   component: React.ComponentClass<D>;
-  fetchData?: (resolve: (data: D) => void) => void;
+  fetchData?: () => Promise<D>;
 }

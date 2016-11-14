@@ -82,6 +82,6 @@ export class Foo extends Component<IData, {}> {
   }
 }
 
-export function fetchData(resolve: (data: IData) => void) {
-  resolve({ assert: true });
+export function fetchData(): Promise<IData> {
+  return Promise.resolve({ assert: true });
 }

@@ -23,8 +23,10 @@ export class Bar extends Component<IArgs & IData, {}> {
   }
 }
 
-export function fetchData(args: IArgs, callback: (data: IData) => void) {
-  setTimeout(() => {
-    callback({ spam: `spam-${args.id}` });
-  }, 1000);
+export function fetchData(args: IArgs): Promise<IData> {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ spam: `spam-${args.id}` });
+    }, 1000);
+  });
 }

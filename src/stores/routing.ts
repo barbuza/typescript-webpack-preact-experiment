@@ -157,7 +157,7 @@ export class Routing {
         if (this.match.route instanceof StaticRoute) {
           const mod = this.modules.get(this.match.route.key) as IStaticPageModule<{}>;
           if (mod.fetchData) {
-            mod.fetchData(data => {
+            mod.fetchData().then(data => {
               if (this.fetcher.path === path) {
                 this.fetcher.data = data;
               }
@@ -166,7 +166,7 @@ export class Routing {
         } else if (this.match.route instanceof DynamicRoute) {
           const mod = this.modules.get(this.match.route.key) as IDynamicPageModule<{}, {}>;
           if (mod.fetchData) {
-            mod.fetchData(this.match.args, data => {
+            mod.fetchData(this.match.args).then(data => {
               if (this.fetcher.path === path) {
                 this.fetcher.data = data;
               }
