@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Component } from '../components/Component';
 
-export class Index extends Component<{}, {}> {
+export class Welcome extends Component<{}, {}> {
   public render() {
-    return <div>index</div>;
+    return <div>Welcome, guest!</div>;
   }
 }

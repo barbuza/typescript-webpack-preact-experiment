@@ -14,7 +14,7 @@ export class StaticRoute<D> {
   constructor(
     public pattern: string,
     public key: string,
-    public load: (resolve: (mod: IStaticPageModule<D>) => void) => void
+    public load: (auth?: boolean) => Promise<IStaticPageModule<D>>
   ) { }
 }
 
@@ -22,7 +22,7 @@ export class DynamicRoute<A, D> {
   constructor(
     public pattern: string,
     public key: string,
-    public load: (resolve: (mod: IDynamicPageModule<A, D>) => void) => void
+    public load: (auth?: boolean) => Promise<IDynamicPageModule<A, D>>
   ) { }
 }
 

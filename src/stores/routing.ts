@@ -126,14 +126,14 @@ export class Routing {
       if (!this.required[match.route.key]) {
         this.required[match.route.key] = true;
         if (match.route instanceof StaticRoute) {
-          match.route.load(mod => {
+          match.route.load(false).then(mod => {
             this.modules.set(match.route.key, {
               component: asReference(mod.component),
               fetchData: asReference(mod.fetchData),
             });
           });
         } else if (match.route instanceof DynamicRoute) {
-          match.route.load(mod => {
+          match.route.load(false).then(mod => {
             this.modules.set(match.route.key, {
               component: asReference(mod.component),
               fetchData: asReference(mod.fetchData),

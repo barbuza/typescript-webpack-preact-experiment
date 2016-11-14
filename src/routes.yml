@@ -1,5 +1,10 @@
 - path: /
-  page: ./pages/Index
+  auth: false
+  page: ./pages/Welcome
+
+- path: /
+  auth: true
+  page: ./pages/Places
 
 - path: /foo
   page: ./pages/Foo
