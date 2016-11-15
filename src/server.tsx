@@ -17,9 +17,6 @@ export function renderPage(pathname: string, cookies: any): any {
     routes,
     history,
   });
-  history.listen(location => {
-    store.routing.path = location.pathname;
-  });
 
   return new Promise((resolve: (result: any) => void) => {
     checkAuth(cookies.user || '').then(result => {

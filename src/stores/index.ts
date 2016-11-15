@@ -20,6 +20,10 @@ export class Store {
     this.auth = new Auth();
     this.routing = new Routing(options.path, options.routes, this);
     this.history = options.history;
+
+    this.history.listen(location => {
+      this.routing.path = location.pathname;
+    });
   }
 
   public emit<T>(action: IAction<T>): T {

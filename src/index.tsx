@@ -17,10 +17,6 @@ const store = new Store({
   history,
 });
 
-history.listen(location => {
-  store.routing.path = location.pathname;
-});
-
 checkAuth(Cookies.get('user')).then(result => {
   if (result) {
     store.auth.user = result.user;
