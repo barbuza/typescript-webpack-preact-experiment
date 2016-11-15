@@ -1,16 +1,4 @@
 /* tslint:disable:no-console */
-
-export interface IUser {
-  id: number;
-  email: string;
-  name: string;
-}
-
-export interface IAuth {
-  token: string;
-  expired: string;
-}
-
 export function login(email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
   console.log('login', { email, password });
   return Promise.resolve({
@@ -20,6 +8,16 @@ export function login(email: string, password: string): Promise<{ user: IUser, a
       name: 'sunify',
     },
     auth: {
+      token: 'token',
+    },
+  });
+}
+
+export function saveUser(user: IUser, token: string): Promise<{ user: IUser, auth: IAuth }> {
+  console.log('login', { user, token });
+  return Promise.resolve({
+    user,
+    auth: { // update token?
       token: 'token',
     },
   });

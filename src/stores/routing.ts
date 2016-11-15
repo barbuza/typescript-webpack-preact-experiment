@@ -38,8 +38,16 @@ interface IMatch {
 
 export class Routing {
   @observable public path: string;
-  @observable public routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
+  /* tslint:disable */
+  @observable protected _routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
+  /* tslint:enable */
   @observable protected store: Store;
+
+  public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
+    // this.fetcher.data = null;
+    this.modules = asMap({} as { [key: string]: IStaticPageModule<{}> | IDynamicPageModule<{}, {}> });
+    this._routes = routes;
+  }
 
   @computed
   public get auth(): boolean {
@@ -95,7 +103,7 @@ export class Routing {
   @computed
   protected get match(): IMatch | null {
     const auth = this.auth;
-    for (const route of this.routes) {
+    for (const route of this._routes) {
       let args = null as {} | null;
       const matchAuth = route.auth === undefined || route.auth === auth;
       if ((route instanceof StaticRoute) && this.path === route.pattern && matchAuth) {
@@ -113,7 +121,7 @@ export class Routing {
   constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
     this.path = path;
     this.store = store;
-    this.routes = routes;
+    this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
   }

@@ -1,4 +1,4 @@
-import { IAuth, IUser, getUser } from '../api/userAPI';
+import { getUser } from '../api/userAPI';
 
 export function checkAuth(cookiesUser: string): Promise<{user: IUser, auth: IAuth} | null> {
   if (!cookiesUser) {

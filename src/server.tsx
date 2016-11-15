@@ -11,15 +11,15 @@ import { routes } from './serverRoutes';
 import { checkAuth } from './support/auth';
 
 export function renderPage(pathname: string, cookies: any): any {
-  const history = createMemoryHistory();
-  const store = new Store({
-    path: pathname,
-    routes,
-    history,
-  });
-
   return new Promise((resolve: (result: any) => void) => {
     checkAuth(cookies.user || '').then(result => {
+      const history = createMemoryHistory();
+      const store = new Store({
+        path: pathname,
+        routes,
+        history,
+      });
+
       if (result) {
         store.auth.user = result.user;
         store.auth.auth = result.auth;

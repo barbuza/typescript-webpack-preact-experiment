@@ -24,7 +24,7 @@ class UserTools extends Component<{}, {}> {
       return (
         <div className={styles.userTools}>
           <div>
-            hello, <Link href="/~" className={styles.link}>{this.store.auth.user.name}</Link>
+            hello, <Link href="/profile" className={styles.link} activeClass={styles.active}>{this.store.auth.user.name}</Link>
           </div>
           <button className={styles.button} onClick={() => this.store.emit(new LogoutAction())}>logout</button>
         </div>

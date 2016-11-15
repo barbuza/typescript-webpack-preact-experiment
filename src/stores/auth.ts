@@ -1,6 +1,5 @@
 import { observable, computed, reaction } from 'mobx';
 import * as Cookies from 'js-cookie';
-import { IUser, IAuth } from '../api/userAPI';
 
 export function parseUser(userJSON: string | null): IUser | null {
   userJSON = userJSON || '';

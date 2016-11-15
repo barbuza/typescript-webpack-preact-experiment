@@ -1,6 +1,6 @@
 import { Store } from '../stores';
 import { IAction } from '../support/actions';
-import { login } from '../api/userAPI';
+import { login, saveUser } from '../api/userAPI';
 
 export class LoginAction implements IAction<void> {
   constructor(protected email: string, protected password: string) {
@@ -11,6 +11,20 @@ export class LoginAction implements IAction<void> {
       store.auth.user = result.user;
       store.auth.auth = result.auth;
       store.history.replace('/');
+    });
+  }
+}
+
+export class EditAction implements IAction<void> {
+  constructor(protected user: IUser) {
+  }
+
+  public react(store: Store) {
+    saveUser(this.user, (store.auth.auth as IAuth).token).then(result => {
+      store.auth.user = result.user;
+      if (result.auth) {
+        store.auth.auth = result.auth;
+      }
     });
   }
 }

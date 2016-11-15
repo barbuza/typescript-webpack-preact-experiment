@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Component } from '../components/Component';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import { Store } from '../stores';
-import { Link } from '../components/Link';
+import { EditAction } from '../actions/user';
+import { merge } from '../utils';
 
 export interface IArgs {
 }
@@ -19,8 +20,10 @@ export class Profile extends Component<IArgs & IData, {}> {
     email: (this.store.auth.user as IUser).email,
   };
 
-  protected handleSubmit() {
-    console.log('submit');
+  protected handleSubmit(e: Event) {
+    e.preventDefault();
+    const userData: IUser = merge(toJS(this.store.auth.user), toJS(this.form));
+    this.store.emit(new EditAction(userData));
   }
 
   public render() {
@@ -32,15 +35,18 @@ export class Profile extends Component<IArgs & IData, {}> {
 
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
-        <h2>{user.name}</h2>
-        <Link href="/profile/edit">Edit</Link>
-        <hr />
+        <h2>Edit profile</h2>
         <div>
-          <strong>Id</strong>: {user.id}
+          <label>Name:<br />
+            <input type="text" value={this.form.name} onChange={e => this.form.name = e.currentTarget.value} />
+          </label>
         </div>
         <div>
-          <strong>Email</strong>: {user.email}
+          <label>Email:<br />
+            <input type="email" value={this.form.email} onChange={e => this.form.email = e.currentTarget.value} />
+          </label>
         </div>
+        <button type="submit">Save</button>
       </form>
     );
   }
