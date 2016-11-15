@@ -15,7 +15,16 @@
     "noUnusedParameters": true,
     "noImplicitThis": true,
     "newLine": "LF",
-    "typeRoots": ["node_modules/@types", "node_modules"],
-    "types": ["node", "react", "es6-promise"]
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules"
+    ],
+    "types": [
+      "node",
+      "react",
+      "es6-promise"
+    ]
   }
 }

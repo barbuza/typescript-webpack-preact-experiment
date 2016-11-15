@@ -13,7 +13,7 @@ export class Link extends Component<{ href: string, activeClass?: string } & Rea
       expr(() => this.store.routing.path === this.props.href) && this.props.activeClass
     );
     return (
-      <a {...omit(this.props, 'activeClass') } onClick={this.handleClick.bind(this)} className={className} />
+      <a {...omit(this.props, 'activeClass') } onClick={this.handleClick.bind(this)} className={className}/>
     );
   }
 
