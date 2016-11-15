@@ -39,7 +39,12 @@ interface IMatch {
 export class Routing {
   @observable public path: string;
   @observable public routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>; // tslint-disable
-  protected store: Store;
+  @observable protected store: Store;
+
+  @computed
+  public get auth(): boolean {
+    return this.store.auth.authenticated;
+  }
 
   @computed
   public get state(): RoutingState {
@@ -89,12 +94,14 @@ export class Routing {
 
   @computed
   protected get match(): IMatch | null {
+    const auth = this.auth;
     for (const route of this.routes) {
       let args = null as {} | null;
-      if ((route instanceof StaticRoute) && this.path === route.pattern) {
+      const matchAuth = route.auth === undefined || route.auth === auth;
+      if ((route instanceof StaticRoute) && this.path === route.pattern && matchAuth) {
         args = {};
       } else if ((route instanceof DynamicRoute)) {
-        args = match(this.path, route.pattern);
+        args = matchAuth ? match(this.path, route.pattern) : null;
       }
       if (args) {
         return { route, args };
@@ -115,15 +122,15 @@ export class Routing {
     const match = this.match;
     if (match) {
       if (match.route instanceof StaticRoute) {
-        match.route.load(false).then(mod => {
-          this.modules.set(match.route.key, {
+        match.route.load().then(mod => {
+          this.modules.set(mod.key || '', {
             component: asReference(mod.component),
             fetchData: asReference(mod.fetchData),
           });
         });
       } else if (match.route instanceof DynamicRoute) {
-        match.route.load(false).then(mod => {
-          this.modules.set(match.route.key, {
+        match.route.load().then(mod => {
+          this.modules.set(mod.key || '', {
             component: asReference(mod.component),
             fetchData: asReference(mod.fetchData),
           });

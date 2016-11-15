@@ -136,9 +136,9 @@ module.exports = function (resultFilename, server = false) {
         
         write(`      const mod = require(${JSON.stringify(mod.request)});`);
         if (mod.hasData) {
-          write(`      resolve({ component: mod.${mod.className}, fetchData: mod.fetchData });`);
+          write(`      resolve({ component: mod.${mod.className}, fetchData: mod.fetchData, key: '${mod.index}' });`);
         } else {
-          write(`      resolve({ component: mod.${mod.className} });`);
+          write(`      resolve({ component: mod.${mod.className}, key: '${mod.index}' });`);
         }
         if(!server) {
           write(`    });`);
@@ -149,46 +149,23 @@ module.exports = function (resultFilename, server = false) {
 
       write('export const routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>> = [];');
 
-      const grouppedItems = _.groupBy(config, 'path');
-      Object.keys(grouppedItems).map(i => grouppedItems[i]).forEach(group => {
-        if(group.length === 1) {
-          const item = group[0];
-          const mod = pageModules[item.page];
-          const isStatic = isStaticPattern(item.path);
-          if (!isStatic) {
-            if (!mod.hasArgs) {
-              throw new Error(`can't connect ${item.path} to ${item.page}: IArgs isn't exported`);
-            }
-            write(`typeCheck<IArgs${mod.index}>({} as ${getArgsType(item.path)});`);
+      config.forEach(item => {
+        const mod = pageModules[item.page];
+        const isStatic = isStaticPattern(item.path);
+        if (!isStatic) {
+          if (!mod.hasArgs) {
+            throw new Error(`can't connect ${item.path} to ${item.page}: IArgs isn't exported`);
           }
-          const dataType = mod.hasData ? `IData${mod.index}` : `{}`;
-          const routeClass = isStatic ? `StaticRoute<${dataType}>` : `DynamicRoute<IArgs${mod.index}, ${dataType}>`;
-          write(`routes.push(new ${routeClass}(${JSON.stringify(item.path)}, ${JSON.stringify(mod.index.toString())}, getPage${mod.index}));\n`);
-        } else if(group.length === 2) {
-          const authItem = group[0].auth ? group[0] : group[1];
-          const defItem = group[1].auth ? group[0] : group[1];
-
-          const authMod = pageModules[authItem.page];
-          const defMod = pageModules[defItem.page];
-
-          const isStatic = true;
-          // const isStatic = isStaticPattern(authItem.path);
-          if (!isStatic) {
-            if (!mod.hasArgs) {
-              throw new Error(`can't connect ${item.path} to ${item.page}: IArgs isn't exported`);
-            }
-            write(`typeCheck<IArgs${mod.index}>({} as ${getArgsType(item.path)});`);
-          }
-
-          const dataType = defMod.hasData ? `IData${mod.index}` : `{}`;
-          const routeClass = isStatic ? `StaticRoute<${dataType}>` : `DynamicRoute<IArgs${mod.index}, ${dataType}>`;
-          const func = `(auth: boolean) => auth ? getPage${authMod.index}() : getPage${defMod.index}()`;
-          write(`routes.push(new ${routeClass}(${JSON.stringify(defItem.path)}, ${JSON.stringify(defMod.index.toString())}, ${func}));\n`);
-        } else {
-          console.error('Error: more than 2 routes for one path');
-          this.emit('error');
+          write(`typeCheck<IArgs${mod.index}>({} as ${getArgsType(item.path)});`);
         }
-      });
+        const dataType = mod.hasData ? `IData${mod.index}` : `{}`;
+        const routeClass = isStatic ? `StaticRoute<${dataType}>` : `DynamicRoute<IArgs${mod.index}, ${dataType}>`;
+        if(item.auth === undefined) {
+          write(`routes.push(new ${routeClass}(${JSON.stringify(item.path)}, ${JSON.stringify(mod.index.toString())}, getPage${mod.index}));\n`);
+        } else {
+          write(`routes.push(new ${routeClass}(${JSON.stringify(item.path)}, ${JSON.stringify(mod.index.toString())}, getPage${mod.index}, ${JSON.stringify(item.auth)}));\n`);
+        }
+      })
 
       file.path = resultFilename; //file.path.replace(/\.yml/, '.ts');
       file.contents = new Buffer(lines.join('\n'));
