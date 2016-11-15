@@ -4,34 +4,34 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'mobx-react';
 import { when } from 'mobx';
 import { Store } from './stores';
-import { parseUser } from './stores/auth';
 import { RoutingState } from './stores/routing';
-import { IAction } from './support/actions';
 import { Root } from './components/Root';
 import { routes } from './serverRoutes';
+import { checkAuth } from './support/auth';
 
-export function renderPage(pathname: string, cookies: any): Promise<string> {
+export function renderPage(pathname: string, cookies: any): any {
   const store = new Store({
     path: pathname,
     routes,
-    user: parseUser(cookies.user || ''),
   });
 
-  function emit<T>(action: IAction<T>): T {
-    console.debug('%cEMIT', 'font-weight: bold; color: white; background: black; padding: 2px 3px 0 3px', action);
-    return action.react(store);
-  }
-
   return new Promise((resolve: (result: any) => void) => {
-    when(() => store.routing.state === RoutingState.READY, () => {
-      resolve([
-        renderToString(
-          <Provider store={store} emit={emit}>
-            <Root />
-          </Provider>
-        ),
-        // toJSON(store),
-      ]);
+    checkAuth(cookies.user || '').then(result => {
+      if (result) {
+        store.auth.user = result.user;
+        store.auth.auth = result.auth;
+      }
+
+      when(() => store.routing.state === RoutingState.READY, () => {
+        resolve([
+          renderToString(
+            <Provider store={store}>
+              <Root />
+            </Provider>
+          ),
+          // toJSON(store),
+        ]);
+      });
     });
   });
 

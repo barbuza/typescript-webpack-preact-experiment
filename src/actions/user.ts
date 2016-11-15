@@ -1,12 +1,16 @@
 import { Store } from '../stores';
 import { IAction } from '../support/actions';
+import { login } from '../api/userAPI';
 
 export class LoginAction implements IAction<void> {
-  constructor(protected name: string) {
+  constructor(protected email: string, protected password: string) {
   }
 
   public react(store: Store) {
-    store.auth.user = { name: this.name };
+    login(this.email, this.password).then(result => {
+      store.auth.user = result.user;
+      store.auth.auth = result.auth;
+    });
   }
 }
 

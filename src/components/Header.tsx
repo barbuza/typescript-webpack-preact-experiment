@@ -8,13 +8,14 @@ import { onChange } from '../utils';
 
 @observer
 class UserTools extends Component<{}, {}> {
-  @observable
-  protected username = '';
+  @observable protected email = '';
+  @observable protected password = '';
 
   protected login() {
-    if (this.username.length) {
-      this.store.emit(new LoginAction(this.username));
-      this.username = '';
+    if (this.email.trim().length && this.password.trim().length) {
+      this.store.emit(new LoginAction(this.email, this.password));
+      this.email = '';
+      this.password = '';
     }
   }
 
@@ -36,7 +37,8 @@ class UserTools extends Component<{}, {}> {
         }}
         className={styles.userTools}
       >
-        <input placeholder="username" value={this.username} {...onChange(val => this.username = val) } />
+        <input placeholder="email" type="email" value={this.email} {...onChange(val => this.email = val) } />
+        <input placeholder="password" type="password" value={this.password} {...onChange(val => this.password = val) } />
         <button className={styles.button} type="submit">login</button>
       </form>
     );

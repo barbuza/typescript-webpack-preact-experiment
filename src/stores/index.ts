@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { Auth, IUser } from './auth';
+import { Auth } from './auth';
 import { Routing } from './routing';
 import { StaticRoute, DynamicRoute } from '../support/routing';
 import { IAction } from '../support/actions';
@@ -7,7 +7,6 @@ import { IAction } from '../support/actions';
 interface IStoreOptions {
   path: string;
   routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>;
-  user: IUser | null;
 };
 
 export class Store {
@@ -15,7 +14,7 @@ export class Store {
   public readonly routing: Routing;
 
   constructor(options: IStoreOptions) {
-    this.auth = new Auth(options.user);
+    this.auth = new Auth();
     this.routing = new Routing(options.path, options.routes, this);
   }
 

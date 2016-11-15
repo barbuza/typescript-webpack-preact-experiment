@@ -1,9 +1,6 @@
 import { observable, computed, reaction } from 'mobx';
 import * as Cookies from 'js-cookie';
-
-export interface IUser {
-  name: string;
-}
+import { IUser, IAuth } from '../api/userAPI';
 
 export function parseUser(userJSON: string | null): IUser | null {
   userJSON = userJSON || '';
@@ -20,22 +17,23 @@ export function parseUser(userJSON: string | null): IUser | null {
 }
 
 export class Auth {
-  @observable
-  public user: IUser | null;
+  @observable public user: IUser | null;
+  @observable public auth: IAuth | null;
 
   @computed
   public get authenticated() {
     return !!this.user;
   }
 
-  constructor(user: IUser | null) {
-    this.user = user;
-
-    reaction(() => this.user, userObject => {
-      try {
-        Cookies.set('user', JSON.stringify(userObject));
-      } catch (err) {
-        console.warn("can't save user in local storage");
+  constructor() {
+    reaction(() => ({ user: this.user, auth: this.auth }), res => {
+      if (res.user && res.auth) {
+        Cookies.set('user', {
+          auth: res.auth,
+          id: res.user.id,
+        });
+      } else {
+        Cookies.remove('user');
       }
     });
   }
