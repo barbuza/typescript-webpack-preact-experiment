@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
@@ -46,9 +45,6 @@ module.exports = ({ watch }) => {
     },
     devtool: process.env.NODE_ENV === 'production' ? '#sourcemap' : '#eval-sourcemap',
     plugins: [
-      new HtmlPlugin({
-        template: './src/index.html'
-      }),
       new webpack.EnvironmentPlugin([
         'NODE_ENV'
       ]),

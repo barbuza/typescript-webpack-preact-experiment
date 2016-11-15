@@ -24,7 +24,6 @@
     "gulp-typescript": "^3.1.2",
     "gulp-util": "^3.0.7",
     "history": "^4.3.0",
-    "html-webpack-plugin": "^2.22.0",
     "isomorphic-style-loader": "^1.1.0",
     "js-yaml": "^3.6.1",
     "lodash": "^4.16.6",
