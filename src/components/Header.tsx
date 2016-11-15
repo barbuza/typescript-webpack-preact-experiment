@@ -23,7 +23,9 @@ class UserTools extends Component<{}, {}> {
     if (this.store.auth.user) {
       return (
         <div className={styles.userTools}>
-          <div>hello {this.store.auth.user.name}</div>
+          <div>
+            hello, <Link href="/~" className={styles.link}>{this.store.auth.user.name}</Link>
+          </div>
           <button className={styles.button} onClick={() => this.store.emit(new LogoutAction())}>logout</button>
         </div>
       );

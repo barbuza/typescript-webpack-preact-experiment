@@ -6,6 +6,9 @@
   auth: true
   page: ./pages/Places
 
+- path: /~
+  page: ./pages/Profile
+
 - path: /foo
   page: ./pages/Foo
 
