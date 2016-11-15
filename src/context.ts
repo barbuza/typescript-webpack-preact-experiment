@@ -1,4 +1,4 @@
-import { IAction } from './actions';
+import { IAction } from './support/actions';
 import { Store } from './stores';
 import { IHistory } from 'history';
 

@@ -2,7 +2,7 @@
 import { Auth, IUser } from './auth';
 import { Routing } from './routing';
 import { StaticRoute, DynamicRoute } from '../support/routing';
-import { IAction } from '../actions';
+import { IAction } from '../support/actions';
 
 interface IStoreOptions {
   path: string;

@@ -6,7 +6,7 @@ import { when } from 'mobx';
 import { Store } from './stores';
 import { parseUser } from './stores/auth';
 import { RoutingState } from './stores/routing';
-import { IAction } from './actions';
+import { IAction } from './support/actions';
 import { Root } from './components/Root';
 import { routes } from './serverRoutes';
 

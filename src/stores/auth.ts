@@ -31,10 +31,9 @@ export class Auth {
   constructor(user: IUser | null) {
     this.user = user;
 
-    reaction(() => this.user, user => {
+    reaction(() => this.user, userObject => {
       try {
-        Cookies.set('user', JSON.stringify(user));
-        // localStorage.setItem('user', JSON.stringify(user));
+        Cookies.set('user', JSON.stringify(userObject));
       } catch (err) {
         console.warn("can't save user in local storage");
       }

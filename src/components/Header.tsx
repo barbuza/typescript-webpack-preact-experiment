@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { Component } from './Component';
 import { Link } from './Link';
-import { LoginAction, LogoutAction } from '../actions';
+import { LoginAction, LogoutAction } from '../actions/user';
 import { onChange } from '../utils';
 
 @observer

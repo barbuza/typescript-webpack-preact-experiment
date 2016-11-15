@@ -1,8 +1,5 @@
-import { Store } from './stores';
-
-export interface IAction<T> {
-  react(store: Store): T;
-}
+import { Store } from '../stores';
+import { IAction } from '../support/actions';
 
 export class LoginAction implements IAction<void> {
   constructor(protected name: string) {
