@@ -6,6 +6,7 @@ declare module 'history' {
   export interface IHistory {
     readonly location: ILocation;
     push(path: string): void;
+    replace(path: string): void;
     listen(callback: (location: ILocation) => void): void;
   }
 

@@ -10,6 +10,7 @@ export class LoginAction implements IAction<void> {
     login(this.email, this.password).then(result => {
       store.auth.user = result.user;
       store.auth.auth = result.auth;
+      store.history.replace('/');
     });
   }
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Component } from '../components/Component';
 import { observer } from 'mobx-react';
+import { Store } from '../stores';
 
 export interface IArgs {
 }
@@ -14,6 +15,7 @@ export class Profile extends Component<IArgs & IData, {}> {
     const { user } = this.store.auth;
 
     if (!user) {
+      // this.history.replace('/');
       return null;
     }
 
@@ -27,6 +29,10 @@ export class Profile extends Component<IArgs & IData, {}> {
   }
 }
 
-export function fetchData(): Promise<IData> {
+export function fetchData(store: Store): Promise<IData> {
+  if (!store.auth.authenticated) {
+    store.history.replace('/');
+  }
+
   return Promise.resolve({});
 }

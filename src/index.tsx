@@ -14,6 +14,7 @@ const history = createBrowserHistory();
 const store = new Store({
   path: history.location.pathname,
   routes,
+  history,
 });
 
 history.listen(location => {
