@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { Component } from '../components/Component';
 
-export class Places extends Component<{}, {}> {
+export interface IArgs {
+}
+
+export interface IData {
+}
+
+export class Places extends Component<IArgs & IData, {}> {
   public render() {
     return (
       <ul>
@@ -11,4 +17,12 @@ export class Places extends Component<{}, {}> {
       </ul>
     );
   }
+}
+
+export function fetchData(): Promise<IData> {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({});
+    }, 1000);
+  });
 }
