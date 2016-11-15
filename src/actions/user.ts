@@ -33,5 +33,6 @@ export class EditAction implements IAction<void> {
 export class LogoutAction implements IAction<void> {
   public react(store: Store) {
     store.auth.user = null;
+    store.history.replace('/');
   }
 }
