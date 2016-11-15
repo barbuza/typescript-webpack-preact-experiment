@@ -25,6 +25,7 @@ export class EditAction implements IAction<void> {
       if (result.auth) {
         store.auth.auth = result.auth;
       }
+      store.history.push('/profile');
     });
   }
 }
