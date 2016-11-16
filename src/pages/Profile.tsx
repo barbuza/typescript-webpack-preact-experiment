@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from '../components/Component';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { Store } from '../stores';
+// import { Store } from '../stores';
 import { Link } from '../components/Link';
 
 export interface IArgs {
@@ -42,10 +42,6 @@ export class Profile extends Component<IArgs & IData, {}> {
   }
 }
 
-export function fetchData(store: Store): Promise<IData> {
-  if (!store.auth.authenticated) {
-    store.routing.redirect('/');
-  }
-
+export function fetchData(): Promise<IData> {
   return Promise.resolve({});
 }
