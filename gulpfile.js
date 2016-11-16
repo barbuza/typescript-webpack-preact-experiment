@@ -1,4 +1,5 @@
-﻿const path = require('path');
+﻿const os = require('os');
+const path = require('path');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const tslint = require('gulp-tslint');
@@ -7,6 +8,12 @@ const typescript = require('gulp-typescript');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const compileRoutes = require('./compileRoutes');
+
+try {
+  os.networkInterfaces();
+} catch (err) {
+  os.networkInterfaces = () => ({});
+}
 
 const tsProject = typescript.createProject('tsconfig.json');
 
@@ -101,4 +108,4 @@ gulp.task('webpack', callback => {
   ]).then(() => callback());
 });
 
-gulp.task('default', ['codegen', 'tsc', 'tslint', 'webpack']);
+gulp.task('default', ['codegen', 'tsc', 'webpack']);
