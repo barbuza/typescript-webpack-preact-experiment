@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import { observable, toJS } from 'mobx';
 import { Store } from '../stores';
 import { EditAction } from '../actions/user';
-import { merge } from '../utils';
 
 export interface IArgs {
 }
@@ -22,7 +21,7 @@ export class Profile extends Component<IArgs & IData, {}> {
 
   protected handleSubmit(e: Event) {
     e.preventDefault();
-    const userData: IUser = merge(toJS(this.store.auth.user), toJS(this.form));
+    const userData: IUser = { ...toJS(this.store.auth.user), ...toJS(this.form) };
     this.store.emit(new EditAction(userData));
   }
 
@@ -38,12 +37,12 @@ export class Profile extends Component<IArgs & IData, {}> {
         <h2>Edit profile</h2>
         <div>
           <label>Name:<br />
-            <input type="text" value={this.form.name} onChange={e => this.form.name = e.currentTarget.value} />
+            <input type="text" value={this.form.name} onChange={e => this.form.name = e.currentTarget.value}/>
           </label>
         </div>
         <div>
           <label>Email:<br />
-            <input type="email" value={this.form.email} onChange={e => this.form.email = e.currentTarget.value} />
+            <input type="email" value={this.form.email} onChange={e => this.form.email = e.currentTarget.value}/>
           </label>
         </div>
         <button type="submit">Save</button>

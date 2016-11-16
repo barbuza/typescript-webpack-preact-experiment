@@ -2,7 +2,6 @@ import * as React from 'react';
 import { observable, IObservableObject } from 'mobx';
 import { observer } from 'mobx-react';
 import { Component } from '../../components/Component';
-import { onChange } from '../../utils';
 
 export interface IData {
   assert: boolean;
@@ -23,6 +22,15 @@ interface IInputProps {
 @observer
 class Field extends Component<IInputProps, {}> {
 
+  protected onChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    let value = input.value;
+    if (this.props.format) {
+      value = this.props.format(value);
+    }
+    this.props.form[this.props.field] = value;
+  }
+
   public render() {
     return (
       <div className={styles.field}>
@@ -30,8 +38,8 @@ class Field extends Component<IInputProps, {}> {
           className={styles.input}
           placeholder={this.props.placeholder}
           value={this.props.form[this.props.field]}
-          {...onChange(val => this.props.form[this.props.field] = val, this.props.format, () => this.forceUpdate()) }
-          />
+          onChange={this.onChange.bind(this)}
+        />
       </div>
     );
   }
@@ -82,6 +90,6 @@ export class Foo extends Component<IData, {}> {
   }
 }
 
-export function fetchData(): Promise<IData> {
-  return Promise.resolve({ assert: true });
+export async function fetchData(): Promise<IData> {
+  return { assert: true };
 }

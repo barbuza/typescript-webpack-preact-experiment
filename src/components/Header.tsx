@@ -4,7 +4,6 @@ import { observable } from 'mobx';
 import { Component } from './Component';
 import { Link } from './Link';
 import { LoginAction, LogoutAction } from '../actions/user';
-import { onChange } from '../utils';
 
 @observer
 class UserTools extends Component<{}, {}> {
@@ -36,11 +35,21 @@ class UserTools extends Component<{}, {}> {
         onSubmit={e => {
           e.preventDefault();
           this.login();
-        }}
+        } }
         className={styles.userTools}
-      >
-        <input placeholder="email" type="email" value={this.email} {...onChange(val => this.email = val) } />
-        <input placeholder="password" type="password" value={this.password} {...onChange(val => this.password = val) } />
+        >
+        <input
+          placeholder="email"
+          type="text"
+          value={this.email}
+          onChange={e => this.email = (e.target as HTMLInputElement).value}
+          />
+        <input
+          placeholder="password"
+          type="password"
+          value={this.password}
+          onChange={e => this.password = (e.target as HTMLInputElement).value}
+          />
         <button className={styles.button} type="submit">login</button>
       </form>
     );
