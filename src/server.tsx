@@ -1,9 +1,9 @@
 /* tslint:disable:no-console */
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory, IHistory } from 'history';
 import { Provider } from 'mobx-react';
-import { transaction } from 'mobx';
+// import { transaction } from 'mobx';
 import { Store } from './stores';
 import { Root } from './components/Root';
 import { routes } from './serverRoutes';
@@ -23,22 +23,29 @@ interface IRequest {
   };
 }
 
-export async function renderPage(baseUrl: string, req: IRequest, res: IResponse): Promise<void> {
-  const authResult = await checkAuth(req.cookies.user || '');
-  const history = createMemoryHistory();
-  const path = req.url;
-  const store = new Store(null, {
+function createStore(path: string, authResult: { user: IUser, auth: IAuth } | null, history: IHistory): Store {
+  const initialState = authResult ? {
+    auth: {
+      auth: authResult.auth,
+      user: authResult.user,
+    },
+    routing: {
+      path,
+      data: null,
+    },
+  } : null;
+
+  return new Store(initialState, {
     path,
     routes,
     history,
   });
+}
 
-  if (authResult) {
-    transaction(() => {
-      store.auth.user = authResult.user;
-      store.auth.auth = authResult.auth;
-    });
-  }
+export async function renderPage(baseUrl: string, req: IRequest, res: IResponse): Promise<void> {
+  const authResult = await checkAuth(req.cookies.user || '');
+  const history = createMemoryHistory();
+  const store = createStore(req.url, authResult, history);
 
   await promisedWhen(() => store.routing.isReady || store.routing.isRedirected);
 

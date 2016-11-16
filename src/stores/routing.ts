@@ -139,11 +139,11 @@ export class Routing {
       return { route, args };
     } else if (matchedRoutes.length === 1) {
       const route = matchedRoutes[0];
-      console.log(route, auth);
+      // console.log(route.pattern, auth);
       if (route.auth === undefined || route.auth === auth) {
         return { route, args };
       } else {
-        console.log('AUTH DOES NOT MATCH', auth ? '/' : '/signin');
+        // console.log('AUTH DOES NOT MATCH', auth ? '/' : '/signin');
         return { route, args, redirectLocation: auth ? '/' : '/signin' };
       }
     }
