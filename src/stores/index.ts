@@ -31,15 +31,16 @@ export class Store {
     }
     this.history = options.history;
 
-    this.history.listen(location => {
+    this.history.listen(location => { // ToDo: move it to routing store?
       this.routing.path = location.pathname;
+      this.routing.isRedirected = false;
     });
   }
 
   public toJSON(): ISerialized {
     return {
       auth: this.auth.toJSON(),
-      routing: this.routing.toJSON()
+      routing: this.routing.toJSON(),
     };
   }
 

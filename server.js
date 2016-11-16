@@ -12,23 +12,9 @@ server.use((req, res) => {
   if(baseUrl !== '/build/') {
     delete require.cache[require.resolve('./server/renderPage')];
   }
+
   const renderPage = require('./server/renderPage').renderPage;
-  renderPage(req.url, req.cookies).then(({ html, store, is404 }) => {
-    res.status(is404 ? 404 : 200);
-    res.send(`<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Webpack App</title>
-    ${baseUrl === '/build/' ? `<link rel="stylesheet" href="${baseUrl}main.css" />` : ''}
-  </head>
-  <body>
-    <div id="app">${html}</div>
-    <script>window._store = ${JSON.stringify(store)};</script>
-    <script src="${baseUrl}main.js" async></script>
-  </body>
-</html>`);
-  });
+  renderPage(baseUrl, req, res);
 });
 
 server.listen(3010, err => {

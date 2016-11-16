@@ -19,10 +19,6 @@ export class Profile extends Component<IArgs & IData, {}> {
     email: (this.store.auth.user as IUser).email,
   };
 
-  protected handleSubmit() {
-    console.log('submit');
-  }
-
   public render() {
     const { user } = this.store.auth;
 
@@ -31,7 +27,7 @@ export class Profile extends Component<IArgs & IData, {}> {
     }
 
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <div>
         <h2>{user.name}</h2>
         <Link href="/profile/edit">Edit</Link>
         <hr />
@@ -41,14 +37,14 @@ export class Profile extends Component<IArgs & IData, {}> {
         <div>
           <strong>Email</strong>: {user.email}
         </div>
-      </form>
+      </div>
     );
   }
 }
 
 export function fetchData(store: Store): Promise<IData> {
   if (!store.auth.authenticated) {
-    store.history.replace('/');
+    store.routing.redirect('/');
   }
 
   return Promise.resolve({});

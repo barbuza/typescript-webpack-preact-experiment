@@ -27,7 +27,8 @@ export enum RoutingState {
   READY,
   LOADING,
   FETCHING,
-  NOT_FOUND
+  NOT_FOUND,
+  REDIRECT
 }
 
 interface IMatch {
@@ -48,7 +49,6 @@ export class Routing {
   @observable protected store: Store;
 
   public set routes(routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>) {
-    // this.fetcher.data = null;
     this.modules = asMap({} as { [key: string]: IStaticPageModule<{}> | IDynamicPageModule<{}, {}> });
     this._routes = routes;
   }
@@ -60,6 +60,10 @@ export class Routing {
 
   @computed
   public get state(): RoutingState {
+    if (this.isRedirected) {
+      return RoutingState.REDIRECT;
+    }
+
     if (this.is404) {
       return RoutingState.NOT_FOUND;
     }
@@ -97,6 +101,8 @@ export class Routing {
   public get is404() {
     return this.match === null;
   }
+
+  @observable public isRedirected = false;
 
   @computed
   protected get component(): React.ComponentClass<{}> | null {
@@ -144,6 +150,11 @@ export class Routing {
     this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
+  }
+
+  @action public redirect(pathname: string) {
+    this.isRedirected = true;
+    this.store.history.replace(pathname);
   }
 
   @action

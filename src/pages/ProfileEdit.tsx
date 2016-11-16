@@ -53,7 +53,7 @@ export class Profile extends Component<IArgs & IData, {}> {
 
 export function fetchData(store: Store): Promise<IData> {
   if (!store.auth.authenticated) {
-    store.history.replace('/');
+    store.routing.redirect('/');
   }
 
   return Promise.resolve({});
