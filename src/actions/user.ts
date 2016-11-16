@@ -1,16 +1,32 @@
 import { Store } from '../stores';
 import { IAction } from '../support/actions';
-import { login, saveUser } from '../api/userAPI';
+import { signin, signup, saveUser } from '../api/userAPI';
 
-export class LoginAction implements IAction<void> {
+export class SigninAction implements IAction<void> {
   constructor(protected email: string, protected password: string) {
   }
 
   public react(store: Store) {
-    login(this.email, this.password).then(result => {
+    signin(this.email, this.password).then(result => {
       store.auth.user = result.user;
       store.auth.auth = result.auth;
-      store.history.replace('/');
+
+      if (store.routing.path === '/signin') {
+        store.routing.redirect('/');
+      }
+    });
+  }
+}
+
+export class SignupAction implements IAction<void> {
+  constructor(protected name: string, protected email: string, protected password: string) {
+  }
+
+  public react(store: Store) {
+    signup(this.name, this.email, this.password).then(result => {
+      store.auth.user = result.user;
+      store.auth.auth = result.auth;
+      store.routing.redirect('/');
     });
   }
 }
@@ -25,7 +41,7 @@ export class EditAction implements IAction<void> {
       if (result.auth) {
         store.auth.auth = result.auth;
       }
-      store.history.push('/profile');
+      store.routing.redirect('/profile');
     });
   }
 }
@@ -33,6 +49,6 @@ export class EditAction implements IAction<void> {
 export class LogoutAction implements IAction<void> {
   public react(store: Store) {
     store.auth.user = null;
-    store.history.replace('/');
+    store.routing.redirect('/');
   }
 }

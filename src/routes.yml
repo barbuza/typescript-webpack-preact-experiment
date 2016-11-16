@@ -14,6 +14,12 @@
   auth: true
   page: ./pages/ProfileEdit
 
+- path: /signin
+  page: ./pages/Signin
+
+- path: /signup
+  page: ./pages/Signup
+
 - path: /foo
   page: ./pages/Foo
 

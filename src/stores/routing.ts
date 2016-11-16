@@ -141,12 +141,7 @@ export class Routing {
       if (route.auth === undefined || route.auth === true && auth === true) {
         return { route, args };
       } else {
-        // console.log('NEED LOGIN');
-        // setTimeout(() => this.redirect('/'));
-        // this.path = '/';
-        // this.redirect('/');
-        // return null;
-        return { route, args, redirectLocation: '/' };
+        return { route, args, redirectLocation: '/signin' };
       }
     }
 

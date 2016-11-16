@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { Component } from './Component';
 import { Link } from './Link';
-import { LoginAction, LogoutAction } from '../actions/user';
+import { SigninAction, LogoutAction } from '../actions/user';
 
 @observer
 class UserTools extends Component<{}, {}> {
@@ -12,7 +12,7 @@ class UserTools extends Component<{}, {}> {
 
   protected login() {
     if (this.email.trim().length && this.password.trim().length) {
-      this.store.emit(new LoginAction(this.email, this.password));
+      this.store.emit(new SigninAction(this.email, this.password));
       this.email = '';
       this.password = '';
     }
@@ -31,27 +31,29 @@ class UserTools extends Component<{}, {}> {
     }
 
     return (
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          this.login();
-        } }
-        className={styles.userTools}
-        >
-        <input
-          placeholder="email"
-          type="text"
-          value={this.email}
-          onChange={e => this.email = (e.target as HTMLInputElement).value}
-          />
-        <input
-          placeholder="password"
-          type="password"
-          value={this.password}
-          onChange={e => this.password = (e.target as HTMLInputElement).value}
-          />
-        <button className={styles.button} type="submit">login</button>
-      </form>
+      <div className={styles.userTools}>
+        <Link href="/signup" className={styles.link} activeClass={styles.active}>Signup</Link>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            this.login();
+          } }
+          >
+          <input
+            placeholder="email"
+            type="text"
+            value={this.email}
+            onChange={e => this.email = (e.target as HTMLInputElement).value}
+            />
+          <input
+            placeholder="password"
+            type="password"
+            value={this.password}
+            onChange={e => this.password = (e.target as HTMLInputElement).value}
+            />
+          <button className={styles.button} type="submit">login</button>
+        </form>
+      </div>
     );
   }
 }

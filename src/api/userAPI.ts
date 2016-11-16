@@ -1,11 +1,25 @@
 /* tslint:disable:no-console */
-export function login(email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
-  console.log('login', { email, password });
+export function signin(email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
+  console.log('signin', { email, password });
   return Promise.resolve({
     user: {
       id: 1,
       email,
       name: 'sunify',
+    },
+    auth: {
+      token: 'token',
+    },
+  });
+}
+
+export function signup(name: string, email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
+  console.log('signup', { name, email, password });
+  return Promise.resolve({
+    user: {
+      id: 1,
+      email,
+      name,
     },
     auth: {
       token: 'token',
