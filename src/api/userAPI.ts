@@ -1,7 +1,10 @@
+import { delay } from '../utils';
+
 /* tslint:disable:no-console */
-export function signin(email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
+export async function signin(email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
   console.log('signin', { email, password });
-  return Promise.resolve({
+  await delay(1000);
+  return {
     user: {
       id: 1,
       email,
@@ -9,13 +12,15 @@ export function signin(email: string, password: string): Promise<{ user: IUser, 
     },
     auth: {
       token: 'token',
+      expired: '',
     },
-  });
+  };
 }
 
-export function signup(name: string, email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
+export async function signup(name: string, email: string, password: string): Promise<{ user: IUser, auth: IAuth }> {
   console.log('signup', { name, email, password });
-  return Promise.resolve({
+  await delay(1000);
+  return {
     user: {
       id: 1,
       email,
@@ -23,25 +28,29 @@ export function signup(name: string, email: string, password: string): Promise<{
     },
     auth: {
       token: 'token',
+      expired: '',
     },
-  });
+  };
 }
 
-export function saveUser(user: IUser, token: string): Promise<{ user: IUser, auth: IAuth }> {
+export async function saveUser(user: IUser, token: string): Promise<{ user: IUser, auth: IAuth }> {
   console.log('login', { user, token });
-  return Promise.resolve({
+  await delay(1000);
+  return {
     user,
     auth: { // update token?
       token: 'token',
+      expired: '',
     },
-  });
+  };
 }
 
-export function getUser(id: number): Promise<IUser> {
+export async function getUser(id: number): Promise<IUser> {
   console.log('getUser', { id });
-  return Promise.resolve({
+  await delay(200);
+  return {
     id: 1,
     email: 'isuntc@gmail.com',
     name: 'sunify',
-  });
+  };
 }
