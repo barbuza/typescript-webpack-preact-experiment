@@ -27,6 +27,7 @@ export class Profile extends Component<IArgs & IData, {}> {
 
   public render() {
     const { user } = this.store.auth;
+    const saving = this.store.formsState.saving.get('profile');
 
     if (!user) {
       return null;
@@ -45,7 +46,9 @@ export class Profile extends Component<IArgs & IData, {}> {
             <input type="email" value={this.form.email} onChange={e => this.form.email = e.currentTarget.value}/>
           </label>
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" disabled={saving}>
+          {saving ? 'Saving...' : 'Save'}
+        </button>
       </form>
     );
   }

@@ -18,6 +18,7 @@ export class Signin extends Component<{}, {}> {
   }
 
   public render() {
+    const saving = this.store.formsState.saving.get('signin');
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
         <h2>Signin</h2>
@@ -27,7 +28,7 @@ export class Signin extends Component<{}, {}> {
         <div>
           <input placeholder="Password" type="password" value={this.form.password} onChange={e => this.form.password = e.currentTarget.value}/>
         </div>
-        <button type="submit">Sign in</button>
+        <button type="submit" disabled={saving}>{saving ? '...' : 'Sign in'}</button>
       </form>
     );
   }

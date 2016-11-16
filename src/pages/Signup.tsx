@@ -19,6 +19,8 @@ export class Signup extends Component<{}, {}> {
   }
 
   public render() {
+    const saving = this.store.formsState.saving.get('signup');
+
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
         <h2>Create new account</h2>
@@ -31,7 +33,7 @@ export class Signup extends Component<{}, {}> {
         <div>
           <input placeholder="Password" type="password" value={this.form.password} onChange={e => this.form.password = e.currentTarget.value}/>
         </div>
-        <button type="submit">Create</button>
+        <button type="submit" disabled={saving}>{saving ? 'Creating new account' : 'Create'}</button>
       </form>
     );
   }

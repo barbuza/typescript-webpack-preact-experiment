@@ -1,5 +1,6 @@
 /* tslint:disable:no-console */
 import { IHistory } from 'history';
+import { FormsState } from './formsState';
 import { Auth, ISerliazed as IAuthSerialized } from './auth';
 import { Routing, ISerialized as IRoutingSerialized } from './routing';
 import { StaticRoute, DynamicRoute } from '../support/routing';
@@ -18,6 +19,7 @@ export interface ISerialized {
 
 export class Store {
   public readonly auth: Auth;
+  public readonly formsState: FormsState;
   public readonly routing: Routing;
   public readonly history: IHistory;
 
@@ -30,6 +32,7 @@ export class Store {
       this.routing = new Routing(null, options.path, options.routes, this);
     }
     this.history = options.history;
+    this.formsState = new FormsState();
 
     this.history.listen(location => { // ToDo: move it to routing store?
       this.routing.path = location.pathname;

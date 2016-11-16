@@ -7,13 +7,11 @@ export class SigninAction implements IAction<void> {
   }
 
   public react(store: Store) {
+    store.formsState.saving.set('signin', true);
     signin(this.email, this.password).then(result => {
+      store.formsState.saving.set('signin', false);
       store.auth.user = result.user;
       store.auth.auth = result.auth;
-
-      // if (store.routing.path === '/signin') {
-      //   store.routing.redirect('/');
-      // }
     });
   }
 }
@@ -23,10 +21,11 @@ export class SignupAction implements IAction<void> {
   }
 
   public react(store: Store) {
+    store.formsState.saving.set('signup', true);
     signup(this.name, this.email, this.password).then(result => {
+      store.formsState.saving.set('signup', false);
       store.auth.user = result.user;
       store.auth.auth = result.auth;
-      // store.routing.redirect('/');
     });
   }
 }
@@ -36,7 +35,9 @@ export class EditAction implements IAction<void> {
   }
 
   public react(store: Store) {
+    store.formsState.saving.set('profile', true);
     saveUser(this.user, (store.auth.auth as IAuth).token).then(result => {
+      store.formsState.saving.set('profile', false);
       store.auth.user = result.user;
       if (result.auth) {
         store.auth.auth = result.auth;

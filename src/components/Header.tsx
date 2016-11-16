@@ -30,6 +30,8 @@ class UserTools extends Component<{}, {}> {
       );
     }
 
+    const saving = this.store.formsState.saving.get('signin');
+
     return (
       <div className={styles.userTools}>
         <form
@@ -50,7 +52,9 @@ class UserTools extends Component<{}, {}> {
             value={this.password}
             onChange={e => this.password = (e.target as HTMLInputElement).value}
             />
-          <button className={styles.button} type="submit">login</button>
+          <button disabled={saving} className={styles.button} type="submit">
+            {saving ? '...' : 'login'}
+          </button>
         </form>
       </div>
     );
