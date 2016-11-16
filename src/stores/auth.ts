@@ -1,18 +1,23 @@
-import { observable, computed, reaction } from 'mobx';
+import { observable, computed, reaction, action, toJS } from 'mobx';
 import * as Cookies from 'js-cookie';
 
 export function parseUser(userJSON: string | null): IUser | null {
   userJSON = userJSON || '';
 
   try {
-      if (userJSON) {
-        return JSON.parse(userJSON);
-      } else {
-        return null;
-      }
-    } catch (err) {
+    if (userJSON) {
+      return JSON.parse(userJSON);
+    } else {
       return null;
     }
+  } catch (err) {
+    return null;
+  }
+}
+
+export interface ISerliazed {
+  user: IUser | null;
+  auth: IAuth | null;
 }
 
 export class Auth {
@@ -24,7 +29,10 @@ export class Auth {
     return !!this.user;
   }
 
-  constructor() {
+  constructor(serialized: ISerliazed | null) {
+    if (serialized) {
+      this.fromJSON(serialized);
+    }
     reaction(() => ({ user: this.user, auth: this.auth }), res => {
       if (res.user && res.auth) {
         Cookies.set('user', {
@@ -35,5 +43,18 @@ export class Auth {
         Cookies.remove('user');
       }
     });
+  }
+
+  @action
+  protected fromJSON(serialized: ISerliazed) {
+    this.user = serialized.user;
+    this.auth = serialized.auth;
+  }
+
+  public toJSON(): ISerliazed {
+    return {
+      user: toJS(this.user || null),
+      auth: toJS(this.auth || null)
+    };
   }
 }

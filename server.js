@@ -13,7 +13,8 @@ server.use((req, res) => {
     delete require.cache[require.resolve('./server/renderPage')];
   }
   const renderPage = require('./server/renderPage').renderPage;
-  renderPage(req.url, req.cookies).then(([html]) => {
+  renderPage(req.url, req.cookies).then(({ html, store, is404 }) => {
+    res.status(is404 ? 404 : 200);
     res.send(`<!DOCTYPE html>
 <html>
   <head>
@@ -23,6 +24,7 @@ server.use((req, res) => {
   </head>
   <body>
     <div id="app">${html}</div>
+    <script>window._store = ${JSON.stringify(store)};</script>
     <script src="${baseUrl}main.js" async></script>
   </body>
 </html>`);

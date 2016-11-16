@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component } from '../components/Component';
+import { delay } from '../utils';
 
 export interface IArgs {
 }
@@ -19,10 +20,7 @@ export class Places extends Component<IArgs & IData, {}> {
   }
 }
 
-export function fetchData(): Promise<IData> {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({});
-    }, 1000);
-  });
+export async function fetchData(): Promise<IData> {
+  await delay(1000);
+  return {};
 }

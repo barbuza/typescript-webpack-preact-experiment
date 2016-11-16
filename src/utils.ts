@@ -1,4 +1,5 @@
 /* tslint:disable:no-namespace */
+import { when } from 'mobx';
 
 export function omit<R, O extends R>(obj: O, ...keys: string[]): R {
   const result = {};
@@ -10,38 +11,18 @@ export function omit<R, O extends R>(obj: O, ...keys: string[]): R {
   return result as R;
 }
 
-declare namespace Object {
-  function assign(...args: any[]): any;
-}
-
-export function assign<P, V extends P>(value: V, part: P): V {
-  return Object.assign({}, value, part);
-}
-
-export function merge<A, B>(a: A, b: B): A & B {
-  return Object.assign({}, a, b);
-}
-
 export function typeCheck<T>(_: T) {
   // pass
 }
 
-export function onChange(
-  handler: (value: string) => void,
-  format?: (value: string) => string,
-  forceUpdate?: () => void
-) {
-  function handle(e: any): void { // ToDo: learn more about type of e
-    const input = e.target as HTMLInputElement;
-    let value = input.value || '';
-    if (format) {
-      value = format(value);
-    }
-    handler(value);
-    if (forceUpdate) {
-      forceUpdate();
-    }
-  }
+export function delay(duration: number): Promise<{}> {
+  return new Promise(resolve => {
+    setTimeout(resolve, duration);
+  });
+}
 
-  return { onChange: handle, onInput: handle };
+export function promisedWhen(condition: () => boolean): Promise<{}> {
+  return new Promise(resolve => {
+    when(condition, resolve);
+  })
 }

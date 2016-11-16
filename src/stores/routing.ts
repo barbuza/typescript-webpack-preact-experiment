@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { observable, computed, asMap, autorun, asReference, transaction } from 'mobx';
-import { merge } from '../utils';
+import { observable, computed, asMap, autorun, asReference, transaction, action } from 'mobx';
 import { StaticRoute, DynamicRoute, IStaticPageModule, IDynamicPageModule } from '../support/routing';
-
 import { Store } from './';
 
 function match(path: string, pattern: string): {} | null {
@@ -28,12 +26,18 @@ function match(path: string, pattern: string): {} | null {
 export enum RoutingState {
   READY,
   LOADING,
-  FETCHING
+  FETCHING,
+  NOT_FOUND
 }
 
 interface IMatch {
   args: {};
   route: StaticRoute<{}> | DynamicRoute<{}, {}>;
+}
+
+export interface ISerialized {
+  path: string;
+  data: {} | null;
 }
 
 export class Routing {
@@ -56,6 +60,9 @@ export class Routing {
 
   @computed
   public get state(): RoutingState {
+    if (this.is404) {
+      return RoutingState.NOT_FOUND;
+    }
     if (!this.component) {
       return RoutingState.LOADING;
     }
@@ -74,11 +81,21 @@ export class Routing {
   }
 
   @computed
+  public get isReady(): boolean {
+    return this.state === RoutingState.READY || this.state === RoutingState.NOT_FOUND;
+  }
+
+  @computed
   protected get data(): {} | null {
     if (this.match && this.path === this.fetcher.path && this.fetcher.data) {
-      return merge(this.match.args, this.fetcher.data);
+      return { ...this.match.args, ...this.fetcher.data };
     }
     return null;
+  }
+
+  @computed
+  public get is404() {
+    return this.match === null;
   }
 
   @computed
@@ -118,12 +135,31 @@ export class Routing {
     return null;
   }
 
-  constructor(path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
+  constructor(serialized: ISerialized | null, path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
+    if (serialized) {
+      this.fromJSON(serialized);
+    }
     this.path = path;
     this.store = store;
     this._routes = routes;
     autorun(this.resolve.bind(this));
     autorun(this.fetch.bind(this));
+  }
+
+  @action
+  protected fromJSON(serialized: ISerialized) {
+    this.path = serialized.path;
+    if (serialized.data) {
+      this.fetcher.data = serialized.data;
+      this.fetcher.path = serialized.path;
+    }
+  }
+
+  public toJSON(): ISerialized {
+    return {
+      path: this.path,
+      data: this.fetcher.path === this.path ? this.fetcher.data : {}
+    };
   }
 
   protected resolve() {
