@@ -1,20 +1,6 @@
 import { observable, computed, reaction, action, toJS } from 'mobx';
 import * as Cookies from 'js-cookie';
 
-export function parseUser(userJSON: string | null): IUser | null {
-  userJSON = userJSON || '';
-
-  try {
-    if (userJSON) {
-      return JSON.parse(userJSON);
-    } else {
-      return null;
-    }
-  } catch (err) {
-    return null;
-  }
-}
-
 export interface ISerliazed {
   user: IUser | null;
   auth: IAuth | null;
