@@ -34,6 +34,7 @@ export enum RoutingState {
 interface IMatch {
   args: {};
   route: StaticRoute<{}> | DynamicRoute<{}, {}>;
+  redirectLocation?: string;
 }
 
 export interface ISerialized {
@@ -63,7 +64,6 @@ export class Routing {
     if (this.isRedirected) {
       return RoutingState.REDIRECT;
     }
-
     if (this.is404) {
       return RoutingState.NOT_FOUND;
     }
@@ -126,19 +126,45 @@ export class Routing {
   @computed
   protected get match(): IMatch | null {
     const auth = this.auth;
-    for (const route of this._routes) {
-      let args = null as {} | null;
-      const matchAuth = route.auth === undefined || route.auth === auth;
-      if ((route instanceof StaticRoute) && this.path === route.pattern && matchAuth) {
-        args = {};
-      } else if ((route instanceof DynamicRoute)) {
-        args = matchAuth ? match(this.path, route.pattern) : null;
-      }
-      if (args) {
+    const matchedRoutes = this._routes.filter(route => (
+      (route instanceof StaticRoute) && this.path === route.pattern ||
+      (route instanceof DynamicRoute) && match(this.path, route.pattern)
+    ));
+
+    const isStatic = matchedRoutes.length > 0 ? matchedRoutes[0] instanceof StaticRoute : true;
+    const args = matchedRoutes.length > 0 ? (isStatic ? {} : match(this.path, matchedRoutes[0].pattern)) as {} : {};
+    if (matchedRoutes.length === 2) {
+      const route = matchedRoutes[0].auth === auth ? matchedRoutes[0] : matchedRoutes[1];
+      return { route, args };
+    } else if (matchedRoutes.length === 1) {
+      const route = matchedRoutes[0];
+      if (route.auth === undefined || route.auth === true && auth === true) {
         return { route, args };
+      } else {
+        // console.log('NEED LOGIN');
+        // setTimeout(() => this.redirect('/'));
+        // this.path = '/';
+        // this.redirect('/');
+        // return null;
+        return { route, args, redirectLocation: '/' };
       }
     }
+
     return null;
+
+    // for (const route of this._routes) {
+    //   let args = null as {} | null;
+    //   const matchAuth = route.auth === undefined || route.auth === auth;
+    //   if ((route instanceof StaticRoute) && this.path === route.pattern && matchAuth) {
+    //     args = {};
+    //   } else if ((route instanceof DynamicRoute)) {
+    //     args = matchAuth ? match(this.path, route.pattern) : null;
+    //   }
+    //   if (args) {
+    //     return { route, args };
+    //   }
+    // }
+    // return null;
   }
 
   constructor(serialized: ISerialized | null, path: string, routes: Array<StaticRoute<{}> | DynamicRoute<{}, {}>>, store: Store) {
@@ -152,9 +178,11 @@ export class Routing {
     autorun(this.fetch.bind(this));
   }
 
-  @action public redirect(pathname: string) {
-    this.isRedirected = true;
-    this.store.history.replace(pathname);
+  public redirect(pathname: string) {
+    setTimeout(() => {
+      this.isRedirected = true;
+      this.store.history.replace(pathname);
+    });
   }
 
   @action
@@ -176,16 +204,18 @@ export class Routing {
   protected resolve() {
     const match = this.match;
     if (match) {
-      if (match.route instanceof StaticRoute) {
+      if (match.redirectLocation) { // ToDo: is it the best place for it?
+        this.redirect(match.redirectLocation);
+      } else if (match.route instanceof StaticRoute) {
         match.route.load().then(mod => {
-          this.modules.set(mod.key || '', {
+          this.modules.set(match.route.key, {
             component: asReference(mod.component),
             fetchData: asReference(mod.fetchData),
           });
         });
       } else if (match.route instanceof DynamicRoute) {
         match.route.load().then(mod => {
-          this.modules.set(mod.key || '', {
+          this.modules.set(match.route.key, {
             component: asReference(mod.component),
             fetchData: asReference(mod.fetchData),
           });

@@ -11,6 +11,7 @@
   page: ./pages/Profile
 
 - path: /profile/edit
+  auth: true
   page: ./pages/ProfileEdit
 
 - path: /foo
