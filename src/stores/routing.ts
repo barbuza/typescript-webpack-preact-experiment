@@ -103,6 +103,7 @@ export class Routing {
   }
 
   @observable public isRedirected = false;
+  @observable public redirectLocation: string | null = null;
 
   @computed
   protected get component(): React.ComponentClass<{}> | null {
@@ -138,10 +139,12 @@ export class Routing {
       return { route, args };
     } else if (matchedRoutes.length === 1) {
       const route = matchedRoutes[0];
-      if (route.auth === undefined || route.auth === true && auth === true) {
+      console.log(route, auth);
+      if (route.auth === undefined || route.auth === auth) {
         return { route, args };
       } else {
-        return { route, args, redirectLocation: '/signin' };
+        console.log('AUTH DOES NOT MATCH', auth ? '/' : '/signin');
+        return { route, args, redirectLocation: auth ? '/' : '/signin' };
       }
     }
 
@@ -174,8 +177,10 @@ export class Routing {
   }
 
   public redirect(pathname: string) {
+    this.path = pathname;
+    this.isRedirected = true;
+    this.redirectLocation = pathname;
     setTimeout(() => {
-      this.isRedirected = true;
       this.store.history.replace(pathname);
     });
   }

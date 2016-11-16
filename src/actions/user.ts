@@ -11,9 +11,9 @@ export class SigninAction implements IAction<void> {
       store.auth.user = result.user;
       store.auth.auth = result.auth;
 
-      if (store.routing.path === '/signin') {
-        store.routing.redirect('/');
-      }
+      // if (store.routing.path === '/signin') {
+      //   store.routing.redirect('/');
+      // }
     });
   }
 }
@@ -26,7 +26,7 @@ export class SignupAction implements IAction<void> {
     signup(this.name, this.email, this.password).then(result => {
       store.auth.user = result.user;
       store.auth.auth = result.auth;
-      store.routing.redirect('/');
+      // store.routing.redirect('/');
     });
   }
 }

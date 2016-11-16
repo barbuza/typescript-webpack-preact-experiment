@@ -42,8 +42,8 @@ export async function renderPage(baseUrl: string, req: IRequest, res: IResponse)
 
   await promisedWhen(() => store.routing.isReady || store.routing.isRedirected);
 
-  if (store.routing.isRedirected) {
-    res.redirect(store.routing.path);
+  if (store.routing.isRedirected && store.routing.redirectLocation) {
+    res.redirect(store.routing.redirectLocation);
   }
 
   if (store.routing.isReady) {

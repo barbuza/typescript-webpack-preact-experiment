@@ -32,7 +32,6 @@ class UserTools extends Component<{}, {}> {
 
     return (
       <div className={styles.userTools}>
-        <Link href="/signup" className={styles.link} activeClass={styles.active}>Signup</Link>
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -66,7 +65,8 @@ export class Header extends Component<{}, {}> {
           <nav>
             <Link activeClass={styles.active} className={styles.link} href="/">index</Link>
             <Link activeClass={styles.active} className={styles.link} href="/foo">foo</Link>
-            <Link activeClass={styles.active} className={styles.link} href="/bar/123">bar-123</Link>
+            <Link activeClass={styles.active} className={styles.link} href="/profile">Profile</Link>
+            <Link activeClass={styles.active} className={styles.link} href="/signup">Signup</Link>
             <Link activeClass={styles.active} className={styles.link} href="/bar/234">bar-234</Link>
             <Link activeClass={styles.active} className={styles.link} href="/spam/345">spam-234</Link>
           </nav>

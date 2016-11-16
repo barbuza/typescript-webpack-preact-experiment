@@ -15,9 +15,11 @@
   page: ./pages/ProfileEdit
 
 - path: /signin
+  auth: false
   page: ./pages/Signin
 
 - path: /signup
+  auth: false
   page: ./pages/Signup
 
 - path: /foo
