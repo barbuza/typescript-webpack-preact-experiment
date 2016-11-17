@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const selectorName = process.env.NODE_ENV === 'production' ? '[hash:base64:8]' : '[name]_[local]_[hash:base64:4]';
 
-module.exports = ({ watch }) => {
+module.exports = ({ watch } = {}) => {
   const config = {
     entry: './src/server',
     output: {
@@ -41,8 +41,7 @@ module.exports = ({ watch }) => {
                 localIdentName: selectorName
               }
             },
-            'postcss-loader',
-            'sass-loader'
+            'postcss-loader?parser=postcss-scss'
           ],
         },
         {
