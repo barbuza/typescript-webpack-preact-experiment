@@ -108,4 +108,4 @@ gulp.task('webpack', callback => {
   ]).then(() => callback());
 });
 
-gulp.task('default', ['codegen', 'tsc', 'webpack']);
+gulp.task('default', ['check', 'webpack']);

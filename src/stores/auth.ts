@@ -40,7 +40,7 @@ export class Auth {
   public toJSON(): ISerliazed {
     return {
       user: toJS(this.user || null),
-      auth: toJS(this.auth || null)
+      auth: toJS(this.auth || null),
     };
   }
 }

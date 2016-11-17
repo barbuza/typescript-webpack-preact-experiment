@@ -1,4 +1,3 @@
-/* tslint:disable:no-namespace */
 import { when } from 'mobx';
 
 export function omit<R, O extends R>(obj: O, ...keys: string[]): R {
@@ -24,5 +23,5 @@ export function delay(duration: number): Promise<{}> {
 export function promisedWhen(condition: () => boolean): Promise<{}> {
   return new Promise(resolve => {
     when(condition, resolve);
-  })
+  });
 }

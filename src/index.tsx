@@ -7,9 +7,11 @@ import { Store, ISerialized } from './stores';
 import { Root } from './components/Root';
 import { routes } from './routes';
 
+/* tslint:disable */
 declare namespace window {
   const _store: ISerialized;
 }
+/* tslint:enable */
 
 const history = createBrowserHistory();
 const store = new Store(window._store, {

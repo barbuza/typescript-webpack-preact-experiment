@@ -197,7 +197,7 @@ export class Routing {
   public toJSON(): ISerialized {
     return {
       path: this.path,
-      data: this.fetcher.path === this.path ? this.fetcher.data : {}
+      data: this.fetcher.path === this.path ? this.fetcher.data : {},
     };
   }
 
